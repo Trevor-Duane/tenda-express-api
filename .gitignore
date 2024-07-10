@@ -1,0 +1,38 @@
+# Node.js Dependencies
+node_modules/
+
+# Sequelize
+config/config.json
+config/config.js
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Dependency directories
+pids
+logs
+results
+
+# Testing
+coverage
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Miscellaneous
+*.tmp
+*.bak
+*.swp
+*~

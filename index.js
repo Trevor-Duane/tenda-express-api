@@ -6,10 +6,8 @@ import cors from 'cors'
 import path from 'path';
 import { fileURLToPath } from 'url';
 import db from './config/database.js';
-import offerRoutes from './routes/offerRoutes.js';
-import orderRoutes from './routes/orderRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-import Routes from './routes/Routes.js';
+import mainRoutes from './routes/mainRoutes.js';
 
 dotenv.config()
 
@@ -17,8 +15,8 @@ dotenv.config()
 const app = express()
 
 //Resolve directory and file paths
-const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
-const __dirname = path.dirname(__filename); // get the name of the directory
+// const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+// const __dirname = path.dirname(__filename); // get the name of the directory
 
 
 //Database connection
@@ -34,24 +32,27 @@ const connectDB = async () => {
 connectDB();
 
 //Middlewares
-app.use(
-    cors({
-        credentials:true,
-        origin: ['http://localhost:3000'],
-        methods: ["GET", "POST", "DELETE", "PATCH"]
+// app.use(
+//     cors({
+//         origin: '*',
+//         allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+//         methods: ["GET", "POST", "DELETE", "PATCH"],
+//         optionsSuccessStatus: 200
 
-    })
-);
+//     })
+// );
+app.use(cors());
 app.use(cookieParser());
-app.use(express.static(path.dirname(__dirname, 'public')));
+// app.use("/images", express.static(path.dirname(__dirname, 'public/uploads')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// app.use("/images", express.static('uploads'))
+app.use("/images", express.static('public/uploads'))
+
 //Routes
-app.use('/api',userRoutes )
-app.use('/api',offerRoutes)
-app.use('/api',orderRoutes)
-app.use('/api', Routes)
+app.use('/auth',userRoutes)
+app.use('/api', mainRoutes)
 
 //Error handling middleware
 app.use((err, req, res, next) => {
@@ -60,5 +61,5 @@ app.use((err, req, res, next) => {
 });
 
 //Start server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, ()=> console.log(`TendaExpress Server listening on port ${PORT}!`))

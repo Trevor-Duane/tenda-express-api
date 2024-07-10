@@ -1,12 +1,13 @@
 import Order from "../models/order.js";
 
 export const createOrder = async (req, res) => {
-    try{
-        const {user_id, username, mobile, order_status, order_type, payment_mode, payment_status, order_items, order_total, delivery_latitude, delivery_longitude, delivery_fee} = req.body;
+    const { user_id, username, mobile, order_status, order_type, payment_mode, payment_status, order_items, order_total, delivery_latitude, delivery_longitude, delivery_fee } = req.body;
+    try {
+        
 
         //Validate the request body
-        if(!user_id || !username || !mobile || !order_status || !order_type || !payment_mode || !payment_status || !order_items || !order_total || !delivery_latitude || !delivery_longitude || !delivery_fee) {
-            return res.status(400).json({ error: "All fields are require"})
+        if (!user_id || !username || !mobile || !order_status || !order_type || !payment_mode || !payment_status || !order_items || !order_total || !delivery_latitude || !delivery_longitude || !delivery_fee) {
+            return res.status(400).json({ error: "All fields are require" })
         }
 
         //Create new offer
@@ -26,17 +27,31 @@ export const createOrder = async (req, res) => {
         });
 
         //Respond with the newly created order
-        res.status(201).json(newOrder)
+        return res.status(201).json({newOrder})
     } catch (error) {
-        res.status(500).json({message: error.message})
+        return res.status(500).json({ message: error.message })
     }
 }
 
 export const getOrders = async (req, res) => {
     try {
         const orders = await Order.findAll()
-        res.json(orders)
+        return res.json({ orders })
     } catch (error) {
-        res.json({message: error.message})
+        return res.json({ message: error.message })
+    }
+}
+
+export const getOrderByPk = async (req, res) => {
+    try {
+        const order = await Order.findOne({ where: { id: req.params.id } });
+
+        if (!order) {
+            return res.status(404).json({ message: `order not found` });
+        }
+        return res.status(200).json({ order })
+
+    } catch (error) {
+        return res.status(500).json({ error: "Server error" })
     }
 }

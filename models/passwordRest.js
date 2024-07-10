@@ -3,7 +3,7 @@ import db from '../config/database.js'
 
 const { DataTypes } = Sequelize
 
-const PasswordRest = db.define('password_reset', {
+const PasswordRest = db.define('password_resets', {
   email: {
     type: DataTypes.STRING
   },

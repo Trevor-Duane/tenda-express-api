@@ -3,13 +3,12 @@ import multer from "multer";
 
 
 export const createOffer = async (req, res) => {
-    try{
-        const {offer_title, offer_body, offer_date} = req.body;
-        const offer_cover = req.file ? req.file.path : null;
-
+    const { offer_title, offer_body, offer_date } = req.body;
+    const offer_cover = req.file ? req.file.path : null;
+    try {
         //Validate the request body
-        if(!offer_title || !offer_body || !offer_date || !offer_cover) {
-            return res.status(400).json({ error: "All fields are require"})
+        if (!offer_title || !offer_body || !offer_date || !offer_cover) {
+            return res.status(400).json({ error: "All fields are require" })
         }
 
         //Create new offer
@@ -21,84 +20,69 @@ export const createOffer = async (req, res) => {
         });
 
         //Respond with the created offer
-        res.status(201).json(newOffer)
+        return res.status(201).json({ newOffer })
     } catch (error) {
-        res.status(500).json({message: error.message})
+        return res.status(500).json({ message: error.message })
     }
 }
 
 export const getAllOffers = async (req, res) => {
     try {
         const offers = await Offer.findAll()
-        res.json(offers)
+        return res.json({ offers })
     } catch (error) {
-        res.json({message: error.message})
+        return res.json({ message: error.message })
     }
-}
+};
 
-export const updateOfferById = async (req, res) => {
-    try{
-        const offerId = parseInt(req.params.id);
-
-        const {offer_title, offer_body, offer_date} = req.body;
-
-        //find post by ID
-        const offer = await Offer.findByPk(offerId)
-
-        //if the post doesnt exist, return a 404 error
-        if(!offer) {
-            return res.status(404).json({ error: 'offer not found'});
-        }
-
-        offer.offer_title = offer_title;
-        offer.offer_body = offer_body;
-        offer.offer_date = offer_date;
-
-        
-        //Delete the offer
-        await offer.save();
-        //Send a success reponse
-        res.status(200).json({ message: 'Offer updated successfully', offer});
-    
-    } catch (err) {
-        //handle errors
-        console.error(err);
-        res.status(500).json({ error: 'Server error' })
-    }
-}
-export const deleteOfferById = async (req, res) => {
-    try{
-        const offerId = parseInt(req.params.id);
-    
-        //find post by ID
-        const offer = await Offer.findByPk(offerId)
-
-        //if the post doesnt exist, return a 404 error
-        if(!offer) {
-            return res.status(404).json({ error: 'offer not found'});
-        }
-        await offer.destroy(); //Delete the offer
-        const offers = await Offer.findAll() // Get all the remaining offers
-        res.status(200).json({ message: 'Offer deleted successfully', offers});  //Send a success reponse
-    
-    } catch (err) {
-        //handle errors
-        console.error(err);
-        res.status(500).json({ error: 'Server error' })
-    }
-}
-
-export const findByPk = async (req, res, next) => {
+export const findOfferById = async (req, res, next) => {
     try {
-    
+
         const offer = await Offer.findOne({ where: { id: req.params.id } });
 
-        if(!offer) {
-            res.status(404).json({message: `offer with ${offer_id} not found`});
+        if (!offer) {
+            return res.status(404).json({ message: `offer not found` });
         }
-        res.status(200).json({offer})
+        return res.status(200).json({ offer })
 
     } catch (error) {
-        res.status(500).json({error: "Server error"})
+        return res.status(500).json({ error: "Server error" })
     }
 }
+
+
+export const editOffer = async (req, res) => {
+    const { offer_title, offer_body, offer_date } = req.body;
+    const offer_cover = req.file ? req.file.path : null;
+
+    try {
+        const offer = await Offer.findOne({ where: { id: req.params.id } })
+        if (offer) {
+            if (offer_title !== undefined) offer.offer_title = offer_title;
+            if (offer_body !== undefined) offer.offer_body = offer_body;
+            if (offer_date !== undefined) offer.offer_date = offer_date;
+            if (offer_cover !== undefined) offer.offer_cover = offer_cover;
+            await offer.save();
+            await offer.reload();
+            return res.status(200).json({ offer });
+        } else {
+            return res.status(404).json({ error: 'Offer not found' });
+        }
+    } catch (error) {
+        return res.status(500).json({ error: 'An error occurred while updating the Offer' });
+    }
+};
+
+export const deleteOffer = async (req, res) => {
+    try {
+        const offer = await Offer.findByPk(req.params.id);
+        if (!offer) {
+            return res.status(404).json({ message: "Offer doesn't exist" });
+        }
+        await offer.destroy();
+        return res.status(200).json({ message: "Offer deleted successfully" });
+    } catch (error) {
+        return res.status(500).json({ error: "An error occurred while deleting the offer" });
+    }
+};
+

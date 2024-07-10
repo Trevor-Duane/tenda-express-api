@@ -4,7 +4,6 @@ import multer from "multer";
 export const submitFeedback = async (req, res) => {
     try{
         const {customer_id, contact, username, email, order_id, feedback} = req.body;
-
         //Validate the request body
         if(!customer_id || !contact || !username || !email || !order_id || !feedback) {
             return res.status(400).json({ error: "All fields are required"})
@@ -21,18 +20,18 @@ export const submitFeedback = async (req, res) => {
         });
 
         //Respond with the created feedback
-        res.status(201).json(newFeedback)
+        return res.status(201).json({newFeedback})
     } catch (error) {
-        res.status(500).json({message: error.message})
+        return res.status(500).json({message: error.message})
     }
 }
 
 export const getAllFeedbacks = async (req, res) => {
     try{
         const feedbacks = await Feedback.findAll();
-        res.status(200).json(feedbacks)
+        return res.status(200).json({feedbacks})
     }
     catch (error) {
-        res.status(500).json({message: error.message})
+        return res.status(500).json({message: error.message})
     }
 }

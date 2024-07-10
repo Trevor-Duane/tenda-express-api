@@ -1,5 +1,6 @@
 'use strict';
 import { Sequelize } from 'sequelize';
+import subcategory from './subcategory.js'
 import db from '../config/database.js'
 
 const { DataTypes } = Sequelize
@@ -31,4 +32,7 @@ const Item = db.define('items', {
   {
     freezeTableName: true
   });
+
+Item.belongsTo(subcategory, { foreignKey: 'subcategory_id' });
+
 export default Item
