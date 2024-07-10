@@ -1,13 +1,17 @@
 'use strict';
 import { Sequelize } from 'sequelize';
-import subcategory from './subcategory.js'
 import db from '../config/database.js'
+import Subcategory from './subcategory.js';
 
 const { DataTypes } = Sequelize
 
 const Item = db.define('items', {
   subcategory_id: {
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    references:{
+      model: Subcategory,
+      key: 'id'
+    }
   },
   item_name: {
     type: DataTypes.STRING
@@ -32,7 +36,5 @@ const Item = db.define('items', {
   {
     freezeTableName: true
   });
-
-Item.belongsTo(subcategory, { foreignKey: 'subcategory_id' });
 
 export default Item

@@ -1,4 +1,6 @@
 import Category from "../models/category.js";
+import {Subcategory, Item} from "../models/index.js"
+
 import multer from "multer";
 
 
@@ -47,7 +49,16 @@ export const editCategory = async (req, res) => {
 
 export const getCategories = async (req, res) => {
     try {
-        const categories = await Category.findAll();
+        const categories = await Category.findAll({
+            include: [{
+                model: Subcategory,
+                attributes: ['id', 'category_id', 'subcategory_name'],
+                include: [{
+                    model: Item,
+                    attributes: ['id', 'item_name', 'item_price', 'item_image', 'item_rating', 'item_description', 'item_status']
+                }]
+            }]
+        });
         return res.status(200).json({ success: true, data: categories });
     } catch (error) {
         return res.status(500).json({ success: false, message: error.message });

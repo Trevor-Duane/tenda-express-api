@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize';
 import db from '../config/database.js'
+import Category from './category.js';
 
 const { DataTypes } = Sequelize
 
@@ -8,7 +9,11 @@ const Subcategory = db.define('subcategorys', {
     type: DataTypes.STRING
   },
   category_id: {
-    type: DataTypes.INTEGER
+    type: DataTypes.INTEGER,
+    references:{
+      model: Category,
+      key: 'id'
+    }
   }, 
   subcategory_status: {
     type: DataTypes.STRING,
@@ -18,4 +23,5 @@ const Subcategory = db.define('subcategorys', {
 {
   freezeTableName:true
 }); 
+
 export default Subcategory

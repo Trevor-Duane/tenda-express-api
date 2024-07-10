@@ -1,5 +1,5 @@
 import Item from "../models/item.js";
-import Subcategory from "../models/subcategory.js"
+import {Subcategory} from "../models/index.js"
 import fs from 'fs'
 import multer from "multer";
 
@@ -36,7 +36,6 @@ export const getAllItems = async (req, res) => {
                 model: Subcategory,
                 attributes: ['id', 'subcategory_name']
             },
-            attributes: ['id', 'item_name', 'item_price', 'item_image', 'item_rating', 'item_description', 'item_status']
         });
         res.status(200).json({success: true, data: items})
     }

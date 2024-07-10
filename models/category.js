@@ -16,5 +16,6 @@ const Category = db.define('categorys', {
 },
 {
   freezeTableName:true
-}); 
+});
+
 export default Category

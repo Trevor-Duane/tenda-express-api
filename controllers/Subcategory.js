@@ -1,4 +1,5 @@
 import Subcategory from "../models/subcategory.js";
+import { Item } from "../models/index.js"
 import multer from "multer";
 
 export const createSubcategory = async (req, res) => {
@@ -42,7 +43,12 @@ export const editSubategory = async (req, res) => {
 
 export const getSubcategories = async (req, res) => {
     try {
-        const subcategories = await Subcategory.findAll()
+        const subcategories = await Subcategory.findAll({
+            include: {
+                model: Item,
+                attributes: ['id']
+            },
+        })
         return res.status(200).json({success: true, data: subcategories})
     } catch (error) {
         return res.status(500).json({ message: error.message })
