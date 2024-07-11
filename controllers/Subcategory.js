@@ -56,7 +56,13 @@ export const getSubcategories = async (req, res) => {
 };
 export const getSubcategoryById = async (req, res) => {
     try {
-        const subcategory = await Subcategory.findOne({ where: { id: req.params.id } });
+        const subcategory = await Subcategory.findOne({ 
+            where: { id: req.params.id },
+            include: {
+                model: Item,
+                attributes: ['id', 'item_name', 'item_price', 'item_image', 'item_rating', 'item_description', 'item_status']
+            }
+         });
 
         if (!subcategory) {
             return res.status(404).json({ message: "Subcategory not found" });
