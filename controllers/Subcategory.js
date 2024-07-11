@@ -68,7 +68,7 @@ export const getSubcategoryById = async (req, res) => {
             return res.status(404).json({ message: "Subcategory not found" });
         }
 
-        return res.status(200).json({ subcategory });
+        return res.status(200).json({data: [subcategory]});
     } catch (error) {
         return res.status(500).json({ error: 'Server error' });
     }
