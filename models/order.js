@@ -35,10 +35,10 @@ const Order = db.define('orders', {
       type: DataTypes.STRING
     },
     delivery_latitude: {
-      type: DataTypes.DOUBLE
+      type: DataTypes.STRING
     },
     delivery_longitude: {
-      type: DataTypes.DOUBLE
+      type: DataTypes.STRING
     }
 },
 {

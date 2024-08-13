@@ -55,3 +55,19 @@ export const getOrderByPk = async (req, res) => {
         return res.status(500).json({ error: "Server error" })
     }
 }
+
+export const updateStatus = async (req, res) => {
+    try {
+        const order = await Order.findByPk(req.body.id)
+
+        if(order) {
+            order.order_status = req.body.status
+            await order.save()
+            res.json({success: true, message: "Status Updated"})
+        } else {
+            res.json({success: false, message: "Item Not Found"})
+        }
+    } catch (error) {
+        res.json({success: false, message: error})    
+    }
+}
