@@ -61,7 +61,7 @@ export const updateStatus = async (req, res) => {
         const order = await Order.findByPk(req.body.id)
 
         if(order) {
-            order.order_status = req.body.status
+            order.order_status = req.body.order_status
             await order.save()
             res.json({success: true, message: "Status Updated"})
         } else {
