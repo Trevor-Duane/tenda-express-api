@@ -38,9 +38,9 @@ module.exports = {
         allowNull: false
       },
       payment_status: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: 0
+        defaultValue: "false"
       },
       order_items: {
         type: Sequelize.JSON,
@@ -55,11 +55,11 @@ module.exports = {
         allowNull: false
       },
       delivery_latitude: {
-        type: Sequelize.DOUBLE,
+        type: Sequelize.STRING,
         allowNull: false
       },
       delivery_longitude: {
-        type: Sequelize.DOUBLE,
+        type: Sequelize.STRING,
         allowNull: false
       },
       createdAt: {

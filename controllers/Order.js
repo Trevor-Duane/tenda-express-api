@@ -6,9 +6,9 @@ export const createOrder = async (req, res) => {
         
 
         //Validate the request body
-        if (!user_id || !username || !mobile || !order_status || !order_type || !payment_mode || !payment_status || !order_items || !order_total || !delivery_latitude || !delivery_longitude || !delivery_fee) {
-            return res.status(400).json({ error: "All fields are require" })
-        }
+        // if (!user_id || !username || !mobile || !order_status || !order_type || !payment_mode || !payment_status || !order_items || !order_total || !delivery_latitude || !delivery_longitude || !delivery_fee) {
+        //     return res.status(400).json({ error: "All fields are require" })
+        // }
 
         //Create new offer
         const newOrder = await Order.create({
@@ -36,7 +36,7 @@ export const createOrder = async (req, res) => {
 export const getOrders = async (req, res) => {
     try {
         const orders = await Order.findAll()
-        return res.json({ orders })
+        return res.status(200).json({success: true, data: orders})
     } catch (error) {
         return res.json({ message: error.message })
     }
