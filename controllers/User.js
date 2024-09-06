@@ -40,6 +40,8 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
+
+  console.log("email & password", email, password)
   try {
     const user = await User.findOne({ where: { email } });
     console.log("This is the user", user)
@@ -54,7 +56,7 @@ export const login = async (req, res) => {
       return res.status(401).json({ success: false, message: "Invalid credentials" })
     }
 
-   const token = generateAccessToken(user.id);
+    const token = generateAccessToken(user.id);
     res.status(200).json({ success: true, token, user:user });
   } catch (error) {
     console.log(error);

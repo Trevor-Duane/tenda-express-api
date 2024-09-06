@@ -24,6 +24,7 @@ coverage
 
 # IDEs and editors
 .vscode/
+nohup.out
 .idea/
 *.sublime-project
 *.sublime-workspace

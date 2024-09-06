@@ -38,7 +38,7 @@ export const getOrders = async (req, res) => {
         const orders = await Order.findAll()
         return res.status(200).json({success: true, data: orders})
     } catch (error) {
-        return res.json({ message: error.message })
+        return res.json({ message: "Server Error" })
     }
 }
 
@@ -50,6 +50,20 @@ export const getOrderByPk = async (req, res) => {
             return res.status(404).json({ message: `order not found` });
         }
         return res.status(200).json({ order })
+
+    } catch (error) {
+        return res.status(500).json({ error: "Server error" })
+    }
+}
+
+export const getOrdersByUserPk = async (req, res) => {
+    try {
+        const orders = await Order.findAll({ where: { user_id: req.params.user_id } });
+
+        if (!orders) {
+            return res.status(404).json({ message: `orders not found` });
+        }
+        return res.status(200).json({ data: orders })
 
     } catch (error) {
         return res.status(500).json({ error: "Server error" })
