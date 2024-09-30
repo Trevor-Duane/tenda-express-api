@@ -1,7 +1,7 @@
 import User from "../models/user.js";
-import bcrypt from 'bcryptjs';
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import dotenv from 'dotenv'
-import jwt from 'jsonwebtoken';
 
 // Store refresh tokens
 

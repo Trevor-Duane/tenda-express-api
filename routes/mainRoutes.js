@@ -12,6 +12,9 @@ import { addAddress, getUserAddresses } from "../controllers/Address.js";
 import { getPayments, storePayment } from "../controllers/Payment.js";
 import { resetPassword, requestPasswordReset } from "../controllers/Passwords.js";
 import { findAllUsers } from "../controllers/User.js";
+import { fetchUsers } from "../controllers/Test.js";
+import { addInventory, addStock, getInventoryItems, getStockItems, removeInventoryItem, removeStockItem, updateInventoryItem, updateStockItem } from "../controllers/stock/Inventory.js";
+import { transferStock } from "../controllers/stock/Stock.js";
 
 const mainRoutes = express.Router();
 
@@ -60,12 +63,28 @@ mainRoutes.get("/order/:id", getOrderByPk);
 mainRoutes.get("/my_order/:user_id", getOrdersByUserPk)
 mainRoutes.post("/status", updateStatus)
 
+//inventory
+mainRoutes.get("/list_inventory", getInventoryItems)
+mainRoutes.put('/update_inventory/:id', updateInventoryItem);
+mainRoutes.post("/add_inventory", addInventory);
+mainRoutes.delete('/remove_inventory/:id', removeInventoryItem);
+
+//stock
+mainRoutes.get('/list_stock', getStockItems)
+mainRoutes.put('/update_stock/:id', updateStockItem);
+mainRoutes.post("/add_stock", addStock);
+mainRoutes.delete('/remove_stock/:id', removeStockItem);
+
+mainRoutes.post('/stock_movement', transferStock)
+
 //Offers
 mainRoutes.get('/offers', getAllOffers)
 mainRoutes.patch('/offer/:id', editOffer)
 mainRoutes.delete('/offer/:id', deleteOffer)
 mainRoutes.get('/offer/:id/', findOfferById)
 mainRoutes.post('/offer', upload.single('offer_cover'), createOffer)
+
+mainRoutes.get('/test', fetchUsers)
 
 
 
