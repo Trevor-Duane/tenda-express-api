@@ -28,7 +28,7 @@ const StoreLog = db.define('store_logs', {
   usage_amount: {
     allowNull: false,
     type: DataTypes.STRING
-  }
+  },
   uom: {
     allowNull: false,
     type: DataTypes.STRING
