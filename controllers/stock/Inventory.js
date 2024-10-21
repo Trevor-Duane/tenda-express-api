@@ -9,6 +9,7 @@ export const getInventoryItems = async (req, res) => {
         return res.json({ message: "Server Error" })
     }
 }
+
 export const updateInventoryItem = async (req, res) => {
     try {
         const { id } = req.params; // Get the item ID from the request URL
@@ -34,15 +35,14 @@ export const updateInventoryItem = async (req, res) => {
 // Controller for adding inventory
 export const addInventory = async (req, res) => {
     try {
-        const { inventory_item, section, uom, unit_price, tags } = req.body;
+        const { item_name, section, uom, quantity } = req.body;
 
         // Assuming you have a model for Inventory
         const newInventoryItem = await Inventory.create({
-            inventory_item,
+            item_name,
             section,
             uom,
-            unit_price,
-            tags,
+            quantity
         });
 
         return res.status(201).json({ success: true, data: newInventoryItem });

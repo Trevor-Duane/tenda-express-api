@@ -2,48 +2,51 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('inventory', {
+    await queryInterface.createTable('store', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      inventory_date: {
+      shopping_list_id: {
         allowNull: false,
-        type: Sequelize.DATEONLY
+        type: Sequelize.INTEGER
       },
       item_name: {
         allowNull: false,
-        type: Sequelize.STRING
-
+        type: Sequelize.STRING,
       },
       section: {
         allowNull: false,
         type: Sequelize.STRING
-
       },
       uom: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      quantity_recieved: {
+      amount_in_store: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      reorder_level: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        defaultValue: 1000
+      },
       createdAt: {
         allowNull: false,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.fn('NOW'),
-        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.fn('NOW'),
-        type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('inventory');
+    await queryInterface.dropTable('store');
   }
 };

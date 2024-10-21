@@ -1,0 +1,24 @@
+Trigger name -> after_inventory_insert
+Table -> inventory
+time -> AFTER
+Event -> INSERT
+
+Definition
+
+BEGIN
+    -- Check if the incoming quantity is greater than 0
+    IF NEW.quantity_recieved > 0 THEN
+        -- Check if the item already exists in the store
+        IF EXISTS (SELECT 1 FROM store WHERE item_name = NEW.item_name AND section = NEW.section) THEN
+            -- Update the existing record in the store table
+            UPDATE store 
+            SET amount_in_store = amount_in_store + NEW.quantity_recieved,
+                updatedAt = NOW()
+            WHERE item_name = NEW.item_name AND section = NEW.section;
+        ELSE
+            -- Insert a new record into the store table
+            INSERT INTO store (item_name, section, uom, amount_in_store, createdAt, updatedAt)
+            VALUES (NEW.item_name, NEW.section, NEW.uom, NEW.quantity_recieved, NOW(), NOW());
+        END IF;
+    END IF;
+END

@@ -2,34 +2,28 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('inventory', {
+    await queryInterface.createTable('role_permissions', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      inventory_date: {
+      role_id: {
         allowNull: false,
-        type: Sequelize.DATEONLY
+        type: Sequelize.INTEGER,
+        references: {
+          model: "roles",
+          key: "id"
+        }
       },
-      item_name: {
+      permission_id: {
         allowNull: false,
-        type: Sequelize.STRING
-
-      },
-      section: {
-        allowNull: false,
-        type: Sequelize.STRING
-
-      },
-      uom: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      quantity_recieved: {
-        allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "permissions",
+          key: "id"
+        }
       },
       createdAt: {
         allowNull: false,
@@ -44,6 +38,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('inventory');
+    await queryInterface.dropTable('role_permissions');
   }
 };

@@ -3,17 +3,20 @@ import db from '../config/database.js'
 
 const { DataTypes } = Sequelize
 
-const Role = db.define('roles', {
-  role_name: {
+const rolePermissions = db.define('role_permissions', {
+  role_id: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.INTEGER
   },
-  description: {
+
+  permission_id: {
     allowNull: false,
-    type: DataTypes.TEXT
+    type: DataTypes.INTEGER
   }
 },
   {
     freezeTableName: true
   });
-export default Role
+
+
+export default rolePermissions

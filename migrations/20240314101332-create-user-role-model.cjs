@@ -9,13 +9,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      user_role: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      },
       role_name: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      description: {
+        allowNull: false,
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,

@@ -2,34 +2,19 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('inventory', {
+    await queryInterface.createTable('permissions', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      inventory_date: {
-        allowNull: false,
-        type: Sequelize.DATEONLY
-      },
-      item_name: {
-        allowNull: false,
-        type: Sequelize.STRING
-
-      },
-      section: {
-        allowNull: false,
-        type: Sequelize.STRING
-
-      },
-      uom: {
-        allowNull: false,
+      permission_name: {
         type: Sequelize.STRING
       },
-      quantity_recieved: {
+      description:{
         allowNull: false,
-        type: Sequelize.INTEGER
+        type:Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
@@ -44,6 +29,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('inventory');
+    await queryInterface.dropTable('permissions');
   }
 };

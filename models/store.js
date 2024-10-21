@@ -1,12 +1,10 @@
 import { Sequelize } from "sequelize"
-import db from "../../config/database.js"
+import db from "../config/database.js";
+import Recipe from "./recipes.js";
 
 const { DataTypes } = Sequelize
 
-const Inventory = db.define('inventory', {
-  inventory_date:{
-    type: DataTypes.DATEONLY
-  },
+const Store = db.define('store', {
   item_name: {
     type: DataTypes.STRING
   },
@@ -16,7 +14,10 @@ const Inventory = db.define('inventory', {
   uom: {
     type: DataTypes.STRING
   },
-  quantity_recieved: {
+  amount_in_store: {
+    type: DataTypes.INTEGER
+  },
+  reorder_level: {
     type: DataTypes.INTEGER
   }
 },
@@ -25,5 +26,5 @@ const Inventory = db.define('inventory', {
   freezeTableName: true
 });
 
-export default Inventory
+export default Store
 

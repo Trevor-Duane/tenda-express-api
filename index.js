@@ -44,8 +44,8 @@ connectDB();
 app.use(cors());
 app.use(cookieParser());
 // app.use("/images", express.static(path.dirname(__dirname, 'public/uploads')));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); //json data
+app.use(express.urlencoded({ extended: true })); //form data
 
 
 

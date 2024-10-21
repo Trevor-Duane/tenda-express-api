@@ -2,65 +2,43 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('stock', {
+    await queryInterface.createTable('budget_drafts', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      inventory_id: {
+      budget_head: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: "inventory",
-          key: "id"
-        }
+        type: Sequelize.STRING
+      },
+      from_date: {
+        allowNull: false,
+        type: Sequelize.DATEONLY
 
       },
-      stock_item: {
+      to_date: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.DATEONLY
       },
-      uom: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      portions_in_stock: {
+      budget_total: {
         allowNull: false,
         type: Sequelize.INTEGER
 
       },
-      portion_size: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      portion_price: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-
-      },
-      stock_price: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-
-      },
-      reorder_level: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-
-      },
-      section: {
+      created_by: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      category: {
+      budget_status: {
         allowNull: false,
-        type: Sequelize.STRING
+        type:Sequelize.STRING,
+        defaultValue: "draft",
       },
-      tag: {
-        allowNull: false,
-        type: Sequelize.STRING
+      remarks:{
+        allowNull: true,
+        type: Sequelize.TEXT,
       },
       createdAt: {
         allowNull: false,
@@ -75,6 +53,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('stock');
+    await queryInterface.dropTable('budget_drafts');
   }
 };

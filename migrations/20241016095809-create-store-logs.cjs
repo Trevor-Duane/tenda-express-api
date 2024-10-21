@@ -1,80 +1,70 @@
 'use strict';
+
+const { type } = require('os');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('stock', {
+    await queryInterface.createTable('store_logs', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      inventory_id: {
+      out_date: {
+        allowNull: false,
+        type: Sequelize.DATEONLY
+      },
+      item_name: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      product_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: "inventory",
+          model: 'items',
           key: "id"
         }
-
       },
-      stock_item: {
+      product_name: {
         allowNull: false,
         type: Sequelize.STRING
-      },
-      uom: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      portions_in_stock: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-
-      },
-      portion_size: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      portion_price: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-
-      },
-      stock_price: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-
-      },
-      reorder_level: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-
       },
       section: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      category: {
+      usage_amount: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
-      tag: {
+      uom: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      leftin_store:{
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      username:{
         allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.fn('NOW'),
-        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.fn('NOW'),
-        type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('stock');
+    await queryInterface.dropTable('store_logs');
   }
 };

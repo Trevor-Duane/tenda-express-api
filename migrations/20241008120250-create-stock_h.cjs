@@ -2,21 +2,25 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('stock', {
+    await queryInterface.createTable('stock_h', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      inventory_id: {
+      stock_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: "inventory",
+          model: "stock",
           key: "id"
         }
 
+      },
+      inventory_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
       },
       stock_item: {
         allowNull: false,
@@ -30,10 +34,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
 
-      },
-      portion_size: {
-        allowNull: false,
-        type: Sequelize.INTEGER
       },
       portion_price: {
         allowNull: false,
@@ -75,6 +75,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('stock');
+    await queryInterface.dropTable('stock_h');
   }
 };

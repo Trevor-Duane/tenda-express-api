@@ -3,7 +3,10 @@ import db from "../../config/database.js"
 
 const { DataTypes } = Sequelize
 
-const Inventory = db.define('inventory', {
+const InventoryHistory = db.define('inventory_h', {
+  inventory_id: {
+    type: DataTypes.INTEGER
+  },
   inventory_date:{
     type: DataTypes.DATEONLY
   },
@@ -25,5 +28,5 @@ const Inventory = db.define('inventory', {
   freezeTableName: true
 });
 
-export default Inventory
+export default InventoryHistory
 

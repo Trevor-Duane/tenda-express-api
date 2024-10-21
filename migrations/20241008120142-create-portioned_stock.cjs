@@ -2,65 +2,32 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('stock', {
+    await queryInterface.createTable('portioned_stock', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      inventory_id: {
+      shoplist_item_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: "inventory",
+          model: "shopping_list",
           key: "id"
         }
-
       },
-      stock_item: {
+      item_name: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      uom: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      portions_in_stock: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-
-      },
-      portion_size: {
+      quantity: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      portion_price: {
+      stock_price:{
         allowNull: false,
         type: Sequelize.INTEGER
-
-      },
-      stock_price: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-
-      },
-      reorder_level: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-
-      },
-      section: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      category: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      tag: {
-        allowNull: false,
-        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -75,6 +42,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('stock');
+    await queryInterface.dropTable('portioned_stock');
   }
 };

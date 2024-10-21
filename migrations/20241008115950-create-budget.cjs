@@ -2,34 +2,43 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('inventory', {
+    await queryInterface.createTable('budget', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      inventory_date: {
+      budget_head: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      from_date: {
+        allowNull: false,
+        type: Sequelize.DATEONLY
+
+      },
+      to_date: {
         allowNull: false,
         type: Sequelize.DATEONLY
       },
-      item_name: {
-        allowNull: false,
-        type: Sequelize.STRING
-
-      },
-      section: {
-        allowNull: false,
-        type: Sequelize.STRING
-
-      },
-      uom: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      quantity_recieved: {
+      budget_total: {
         allowNull: false,
         type: Sequelize.INTEGER
+
+      },
+      created_by: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      budget_status: {
+        allowNull: false,
+        type:Sequelize.STRING,
+        defaultValue: "new",
+      },
+      remarks:{
+        allowNull: true,
+        type: Sequelize.TEXT,
       },
       createdAt: {
         allowNull: false,
@@ -38,12 +47,11 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
-        defaultValue: Sequelize.fn('NOW'),
         type: Sequelize.DATE
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('inventory');
+    await queryInterface.dropTable('budget');
   }
 };
