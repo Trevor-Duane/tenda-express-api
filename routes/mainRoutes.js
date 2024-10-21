@@ -16,8 +16,8 @@ import { fetchUsers } from "../controllers/Test.js";
 import { addInventory, addStock, getInventoryItems, getStockItems, removeInventoryItem, removeStockItem, updateInventoryItem, updateStockItem } from "../controllers/stock/Inventory.js";
 import { transferStock } from "../controllers/stock/Stock.js";
 import { createBudget, createBudgetDetails, fetchBudgetWithDetailsById, getBudgets, getBudgetsDetails, getDraftBudgets, updateBudgetStatus, updateDraftBudgetDetails } from "../controllers/stock/Budget.js";
-import { getStoreItems, populateStoreLogs } from "../controllers/Store.js";
-import { createRecipeItem, fetchRecipesByProductId } from "../controllers/Recipe.js";
+import { getStoreItems, getStoreLogItems } from "../controllers/Store.js";
+import { createRecipeItem, fetchRecipesByProductId, populateStoreLogs } from "../controllers/Recipe.js";
 import { getShoppingItems, removeShopItem, updateShopListItem } from "../controllers/stock/Shoplist.js";
 
 const mainRoutes = express.Router();
@@ -50,7 +50,8 @@ mainRoutes.get('/recipes/:id', fetchRecipesByProductId)
 
 //Storess
 mainRoutes.get('/store_items', getStoreItems)
-mainRoutes.get('/store_log', populateStoreLogs)
+mainRoutes.post('/store_log', populateStoreLogs)
+mainRoutes.get('/store_logs', getStoreLogItems)
 
 //Addons
 mainRoutes.post('/add-addon', upload.single('addon_image'), createAddon)

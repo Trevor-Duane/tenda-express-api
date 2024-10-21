@@ -5,6 +5,9 @@ import Recipe from "./recipes.js";
 const { DataTypes } = Sequelize
 
 const Store = db.define('store', {
+  shopping_list_id: {
+    type: DataTypes.INTEGER
+  },
   item_name: {
     type: DataTypes.STRING
   },

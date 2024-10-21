@@ -42,7 +42,7 @@ module.exports = {
       },
       uom: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       leftin_store:{
         allowNull: false,

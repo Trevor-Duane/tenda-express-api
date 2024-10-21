@@ -12,32 +12,42 @@ export const getStoreItems = async (req, res) => {
     }
 };
 
-export const populateStoreLogs = async (req, res) => {
-    const { out_date, item_name, product_id, product_name, section, usage_amount, uom, leftin_store, username } = req.body;
+export const getStoreLogItems = async (req, res) => {
     try {
-        
-
-        //Validate the request body
-        if (out_date || item_name || product_id || product_name || section || usage_amount || uom || leftin_store || username) {
-            return res.status(400).json({ error: "All fields are require" })
-        }
-
-        //Create new offer
-        const newLog = await StoreLog.create({
-            out_date,
-            item_name,
-            product_id,
-            product_name,
-            section,
-            usage_amount,
-            uom,
-            leftin_store,
-            username
-        });
-
-        //Respond with the newly created order
-        return res.status(201).json({newLog})
+        const store_log_items = await StoreLog.findAll()
+        return res.status(200).json({success: true, data: store_log_items})
     } catch (error) {
         return res.status(500).json({ message: error.message })
     }
 };
+
+// export const populateStoreLogs = async (req, res) => {
+//     const { out_date, item_name, product_id, product_name, section, usage_amount, uom, leftin_store, username } = req.body;
+//     try {
+        
+
+//         //Validate the request body
+//         if (out_date || item_name || product_id || product_name || section || usage_amount || uom || leftin_store || username) {
+//             return res.status(400).json({ error: "All fields are require" })
+//         }
+
+//         //Create new offer
+//         const newLog = await StoreLog.create({
+//             out_date,
+//             item_name,
+//             product_id,
+//             product_name,
+//             section,
+//             usage_amount,
+//             uom,
+//             leftin_store,
+//             username
+//         });
+
+//         //Respond with the newly created order
+//         return res.status(201).json({newLog})
+//     } catch (error) {
+//         return res.status(500).json({ message: error.message })
+//     }
+// };
+
