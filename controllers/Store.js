@@ -17,7 +17,7 @@ export const populateStoreLogs = async (req, res) => {
     try {
         
 
-        Validate the request body
+        //Validate the request body
         if (out_date || item_name || product_id || product_name || section || usage_amount || uom || leftin_store || username) {
             return res.status(400).json({ error: "All fields are require" })
         }
