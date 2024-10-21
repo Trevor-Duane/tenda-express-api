@@ -11,7 +11,11 @@ module.exports = {
       },
       shopping_list_id: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "shopping_list",
+          key: "id"
+        }
       },
       item_name: {
         allowNull: false,

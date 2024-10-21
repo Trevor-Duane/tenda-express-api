@@ -13,6 +13,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATEONLY
       },
+      shopping_list_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: "shopping_list",
+          key: "id"
+        }
+      },
       item_name: {
         allowNull: false,
         type: Sequelize.STRING
