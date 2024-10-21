@@ -27,7 +27,7 @@ export const populateStoreLogs = async (req, res) => {
             out_date,
             item_name,
             product_id,
-            product_name
+            product_name,
             section,
             usage_amount,
             uom,
