@@ -23,7 +23,7 @@ const Budget = db.define('budget', {
     type: DataTypes.STRING
   },
   remarks:{
-    type: DataTypes.STRING
+    type: DataTypes.TEXT
   },
   UpdatedAt: {
     type:DataTypes.DATE

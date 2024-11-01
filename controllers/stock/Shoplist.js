@@ -1,8 +1,14 @@
 import shoppingList from "../../models/shopping_list.js"
+import {Store} from "../../models/index.js"
 
 export const getShoppingItems = async (req, res) => {
     try {
-        const items = await shoppingList.findAll()
+        const items = await shoppingList.findAll({
+            include: {
+                model: Store,
+                attributes: ['id', 'amount_in_store']
+            }
+        })
         return res.status(200).json({ success: true, data: items })
     } catch (error) {
         return res.json({ message: "Server Error" })

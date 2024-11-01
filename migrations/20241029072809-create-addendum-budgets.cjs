@@ -2,43 +2,41 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('budget', {
+    await queryInterface.createTable('addendum_budgets', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      budget_head: {
+      budget_id: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        references: {
+          model: "budget",
+          key: "id"
+        }
       },
-      from_date: {
+      date: {
         allowNull: false,
         type: Sequelize.DATEONLY
-
       },
-      to_date: {
-        allowNull: false,
-        type: Sequelize.DATEONLY
-      },
-      budget_total: {
+      addendum_amount: {
         allowNull: false,
         type: Sequelize.INTEGER
-
+      },
+      remarks: {
+        allowNull: true,
+        type: Sequelize.TEXT,
+      },
+      status: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: "new",
       },
       created_by: {
         allowNull: false,
         type: Sequelize.STRING
-      },
-      budget_status: {
-        allowNull: false,
-        type:Sequelize.STRING,
-        defaultValue: "new",
-      },
-      remarks:{
-        allowNull: true,
-        type: Sequelize.TEXT,
       },
       createdAt: {
         allowNull: false,
@@ -53,6 +51,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('budget');
+    await queryInterface.dropTable('addendum_budgets');
   }
 };

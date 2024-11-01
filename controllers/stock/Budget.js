@@ -13,7 +13,7 @@ export const createBudget = async (req, res) => {
     try {
         // Raw SQL Insert Query with Sequelize
         const newBudget = await db.query(
-            "INSERT INTO budget_drafts (budget_head, from_date, to_date, budget_total, created_by, remarks) VALUES (?, ?, ?, ?, ?, ?)",
+            "INSERT INTO budget (budget_head, from_date, to_date, budget_total, created_by, remarks) VALUES (?, ?, ?, ?, ?, ?)",
             {
                 replacements: [budget_head, from_date, to_date, budget_total, created_by, remarks],
                 type: Sequelize.QueryTypes.INSERT
