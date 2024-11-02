@@ -1,5 +1,5 @@
 import express from "express";
-import { login, register, updateProfileImage } from "../controllers/User.js";
+import { login, register, updateProfileImage, updateUserPassword } from "../controllers/User.js";
 // import upload from "../middlewares/uploadMiddleware.js";
 import upload from "../middlewares/imageMiddleware.js";
 import { requestPasswordReset, resetPassword } from "../controllers/Passwords.js";
@@ -13,6 +13,7 @@ userRoutes.post('/register', upload.single('profile_image'), updateProfileImage)
 //Password Rest
 userRoutes.post('/password-reset', requestPasswordReset)
 userRoutes.post('/reset-password', resetPassword)
+userRoutes.post('/update-password', updateUserPassword)
 
 
 export default userRoutes;

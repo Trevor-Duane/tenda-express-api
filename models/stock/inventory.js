@@ -4,7 +4,10 @@ import db from "../../config/database.js"
 const { DataTypes } = Sequelize
 
 const Inventory = db.define('inventory', {
-  inventory_date:{
+  shopping_list_id: {
+    type: DataTypes.INTEGER
+  },
+  inventory_date: {
     type: DataTypes.DATEONLY
   },
   item_name: {
@@ -21,9 +24,9 @@ const Inventory = db.define('inventory', {
   }
 },
 
-{
-  freezeTableName: true
-});
+  {
+    freezeTableName: true
+  });
 
 export default Inventory
 

@@ -158,7 +158,7 @@ export const login = async (req, res) => {
 // }
 
 const generateAccessToken = (id) => {
-  return jwt.sign({id}, process.env.JWT_SECRET)
+  return jwt.sign({ id }, process.env.JWT_SECRET)
 };
 
 // export const refreshToken = (req, res) => {
@@ -184,7 +184,7 @@ export const findUserByRoleId = async (req, res) => {
 export const findAllUsers = async (req, res) => {
   try {
     const users = await User.findAll()
-    return res.json({success: true, data: users})
+    return res.json({ success: true, data: users })
   } catch (error) {
     return res.json({ message: error.message })
   }
@@ -214,3 +214,89 @@ export const updateProfileImage = async (req, res) => {
   }
 
 }
+
+// export const updateUserPassword = async (req, res) => {
+//   const { userId, currentPassword, newPassword } = req.body;
+
+//   try {
+//     // Find the user in the database
+//     const user = await User.findByPk(userId);
+//     console.log("this is the user i found", user)
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     // Verify if the current password is correct
+//     const isMatch = await bcrypt.compare(currentPassword, user.password);
+//     if (!isMatch) {
+//       return res.status(401).json({ message: "Current password is incorrect" });
+//     }
+
+//     // Hash the new password
+//     // Hash the password
+//     const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+//     // Update the password in the database
+//     await User.update(
+//       { password: hashedPassword },
+//       { where: { id: userId } }
+//     );
+
+//     res.status(200).json({
+//       message: "Password updated successfully. Please log in again.",
+//     });
+//   } catch (error) {
+//     console.error("Error changing password:", error);
+//     res.status(500).json({ message: "An error occurred. Please try again." });
+//   }
+// };
+
+export const updateUserPassword = async (req, res) => {
+  const { userId, currentPassword, newPassword } = req.body;
+
+  console.log("Request body:", req.body);
+
+
+  // Validate request payload
+  if (!userId || !currentPassword || !newPassword) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+
+  try {
+    // Find the user in the database
+    const user = await User.findByPk(userId);
+    console.log("User found:", user);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    // Verify if the current password is correct
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Current password is incorrect." });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the password in the database
+    // if(hashedPassword){
+    //   user.password = hashedPassword
+    //   await user.save()
+    // }
+    await User.update(
+      { password: hashedPassword },
+      { where: { id: userId } }
+    );
+
+    console.log("Password updated successfully for user ID:", userId);
+    res.status(200).json({
+      message: "Password updated successfully. Please log in again.",
+    });
+  } catch (error) {
+    console.error("Error changing password:", error);
+    res.status(500).json({ message: "An error occurred. Please try again." });
+  }
+};
+
