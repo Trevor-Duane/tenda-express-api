@@ -41,7 +41,14 @@ connectDB();
 
 //     })
 // );
-app.use(cors());
+
+// app.use(cors());
+// Enable CORS for all routes
+app.use(cors({
+    origin: 'https://admin.tendacafe.com',  
+    methods: ['GET', 'POST', 'DELETE', 'PATCH', 'OPTIONS'], 
+    allowedHeaders: ['Content-Type', 'Authorization'], 
+  }));
 app.use(cookieParser());
 // app.use("/images", express.static(path.dirname(__dirname, 'public/uploads')));
 app.use(express.json()); //json data
