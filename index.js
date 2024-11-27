@@ -45,8 +45,8 @@ connectDB();
 // app.use(cors());
 // Enable CORS for all routes
 app.use(cors({
-    origin: 'https://admin.tendacafe.com',  
-    methods: ['GET', 'POST', 'DELETE', 'PATCH', 'OPTIONS'], 
+    origin: ['https://admin.tendacafe.com', 'http://localhost:5173'],
+    methods: ['GET', 'POST', 'DELETE', 'PATCH', 'OPTIONS', 'PUT'], 
     allowedHeaders: ['Content-Type', 'Authorization'], 
   }));
 app.use(cookieParser());
