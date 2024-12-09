@@ -32,7 +32,7 @@ module.exports = {
       status: {
         allowNull: false,
         type: Sequelize.STRING,
-        defaultValue: "new",
+        defaultValue: "New",
       },
       created_by: {
         allowNull: false,

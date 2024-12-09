@@ -33,6 +33,34 @@ export const createBudget = async (req, res) => {
     }
 }
 
+export const createAddendumBudget = async (req, res) => {
+    const { budget_id, remarks,  date, addendum_amount, created_by } = req.body;
+
+    console.log("createbudget", budget_id, remarks,  date, addendum_amount, created_by)
+
+    try {
+        // Raw SQL Insert Query with Sequelize
+        const newBudget = await db.query(
+            "INSERT INTO addendum_budgets (budget_id, date, addendum_amount, created_by, remarks) VALUES (?, ?, ?, ?, ?)",
+            {
+                replacements: [budget_id, date, addendum_amount, created_by, remarks],
+                type: Sequelize.QueryTypes.INSERT
+            }
+        );
+        /// Fetch the inserted budget id
+        const [AddendumBudgetId] = await db.query("SELECT LAST_INSERT_ID() as id", {
+            type: Sequelize.QueryTypes.SELECT
+        });
+
+        // Log the new budget response
+        console.log("This is a create budget response", AddendumBudgetId.id);
+        res.status(200).json({ budget: AddendumBudgetId.id });
+    } catch (error) {
+        console.error("Error creating budget:", error);
+        res.status(500).json({ success: false, message: "Error creating addendum budget." });
+    }
+}
+
 export const createBudgetDetails = async (req, res) => {
     const { details } = req.body;
 
@@ -133,14 +161,14 @@ export const fetchBudgetWithDetailsById = async (req, res) => {
     }
 }
 
-export const updateDraftBudgetDetails = async (req, res) => {
+export const updateBudgetDetails = async (req, res) => {
     const budgetId = req.params.id;
     const { budget_head, from_date, to_date, budget_total, created_by, remarks, details } = req.body;
 
     try {
         console.log("details is not iterable", details)
         // Update budget table details
-        await BudgetDraft.update(
+        await Budget.update(
             {
                 budget_head: budget_head,
                 from_date: from_date,
