@@ -12,7 +12,7 @@ module.exports = {
       inventory_date: {
         allowNull: false,
         type: Sequelize.DATEONLY,
-        defaultValue: Sequelize.fn('CURRENT_DATE')
+        defaultValue: Sequelize.literal('CURRENT_DATE')
       },
       shopping_list_id: {
         allowNull: false,
