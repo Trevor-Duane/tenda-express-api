@@ -11,8 +11,7 @@ module.exports = {
       },
       inventory_date: {
         allowNull: false,
-        defaultValue: Sequelize.fn('NOW'),
-        type: Sequelize.DATE
+        type: Sequelize.DATEONLY
       },
       shopping_list_id: {
         allowNull: false,
