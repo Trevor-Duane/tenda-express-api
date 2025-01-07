@@ -35,7 +35,7 @@ export const updateInventoryItem = async (req, res) => {
 // Controller for adding inventory
 export const addInventory = async (req, res) => {
     try {
-        const { shopping_list_id, item_name, section, uom, quantity_recieved } = req.body;
+        const { shopping_list_id, item_name, section, uom, quantity_recieved, inventory_date } = req.body;
 
         // Assuming you have a model for Inventory
         const newInventoryItem = await Inventory.create({
