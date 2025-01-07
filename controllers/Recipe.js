@@ -6,8 +6,6 @@ import StoreLog from "../models/store_logs.js";
 export const createRecipeItem = async (req, res) => {
         const {store_id, product_id, usage_amount, uom} = req.body;
 
-        console.log(req.body, 'request body')
-        
     try{
         
         //Validate the request body

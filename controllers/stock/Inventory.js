@@ -40,7 +40,7 @@ export const addInventory = async (req, res) => {
         // Assuming you have a model for Inventory
         const newInventoryItem = await Inventory.create({
             shopping_list_id,
-            // inventory_date,
+            inventory_date,
             item_name,
             section,
             uom,
