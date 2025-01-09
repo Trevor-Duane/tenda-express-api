@@ -1,8 +1,8 @@
 import Budget from "../../models/budget.js";
-import BudgetDraft from "../../models/budget_drafts.js";
 import budgetDetail from "../../models/budget_detail.js";
 import db from "../../config/database.js";
 import { Sequelize } from "sequelize";
+import addendumBudget from "../../models/addendum_budgets.js";
 
 
 export const createBudget = async (req, res) => {
@@ -104,9 +104,9 @@ export const getBudgets = async (req, res) => {
     }
 };
 
-export const getDraftBudgets = async (req, res) => {
+export const getAddendumBudgets = async (req, res) => {
     try {
-        const items = await BudgetDraft.findAll();
+        const items = await addendumBudget.findAll();
         return res.status(200).json({ success: true, data: items });
     } catch (error) {
         console.error("Error fetching budgets:", error); // Log the error for debugging

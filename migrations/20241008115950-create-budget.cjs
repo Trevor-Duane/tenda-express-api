@@ -34,7 +34,7 @@ module.exports = {
       budget_status: {
         allowNull: false,
         type:Sequelize.STRING,
-        defaultValue: "new",
+        defaultValue: "New",
       },
       remarks:{
         allowNull: true,

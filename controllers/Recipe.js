@@ -27,6 +27,21 @@ export const createRecipeItem = async (req, res) => {
     }
 };
 
+export const getAllRecipes = async (req, res) => {
+    try {
+        const recipes = await Recipe.findAll({
+            include: [{
+                model: Item,
+                attributes: ['id', 'item_name', 'item_price', 'item_image', 'item_rating', 'item_description', 'item_status']
+            }]
+            
+        });
+        return res.status(200).json({ success: true, data: recipes });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
 export const fetchRecipesByProductId = async (req, res) => {
     const productId = req.params.id;
 
@@ -56,10 +71,10 @@ export const fetchRecipesByProductId = async (req, res) => {
 }
 
 export const populateStoreLogs = async (req, res) => {
-    const { out_date, product_id, username } = req.body; // Simplified the input fields
+    const { kot, out_date, product_id, username } = req.body; // Simplified the input fields
     try {
         // Validate the request body
-        if (!out_date || !product_id || !username) {
+        if (!kot || !out_date || !product_id || !username) {
             return res.status(400).json({ error: "All fields are required" });
         }
 
@@ -101,6 +116,7 @@ export const populateStoreLogs = async (req, res) => {
 
             // Create a log for the stock out
             await StoreLog.create({
+                kot,
                 out_date,
                 item_name,
                 product_id,

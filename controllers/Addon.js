@@ -30,7 +30,7 @@ export const createAddon = async (req, res) => {
 export const getAllAddons = async (req, res) => {
     try {
         const addons = await Addon.findAll();
-        return res.status(200).json({ addons })
+        return res.status(200).json({ data: addons })
     }
     catch (error) {
         return res.status(500).json({ message: error.message })

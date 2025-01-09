@@ -43,7 +43,7 @@ export const getAllItems = async (req, res) => {
                     attributes: ['id', "usage_amount", "uom"],
                     include: {
                         model: Store,
-                        attributes: ['id', "amount_in_store"]
+                        attributes: ['id', "item_name",  "amount_in_store"]
                     }
                 }
                     ]

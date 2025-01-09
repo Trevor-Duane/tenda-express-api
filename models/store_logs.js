@@ -5,6 +5,10 @@ import Recipe from "./recipes.js";
 const { DataTypes } = Sequelize
 
 const StoreLog = db.define('store_logs', {
+  kot: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
   out_date: {
     allowNull: false,
     type: DataTypes.DATEONLY

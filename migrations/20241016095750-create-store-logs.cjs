@@ -12,6 +12,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      kot: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
       out_date: {
         allowNull: false,
         type: Sequelize.DATEONLY
