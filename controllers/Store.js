@@ -14,6 +14,31 @@ export const getStoreItems = async (req, res) => {
     }
 };
 
+export const generateReports = async (req, res) => {
+    const { reportType, filters } = req.body;
+  
+    let query;
+    switch (reportType) {
+      case 'store':
+        query = 'SELECT * FROM store';
+        break;
+      case 'sales':
+        query = 'SELECT * FROM sales WHERE date BETWEEN ? AND ?';
+        break;
+      default:
+        return res.status(400).send('Invalid report type');
+    }
+  
+    try {
+      const [rows] = await db.query(query, filters || [], {
+        type: Sequelize.QueryTypes.SELECT
+      });
+      res.json(rows);
+    } catch (error) {
+      res.status(500).send('Error generating report');
+    }
+}
+
 export const getStoreLogItems = async (req, res) => {
     try {
         const store_log_items = await StoreLog.findAll({

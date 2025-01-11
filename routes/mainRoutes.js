@@ -16,7 +16,7 @@ import { fetchUsers } from "../controllers/Test.js";
 import { addInventory, addStock, getInventoryItems, getStockItems, removeInventoryItem, removeStockItem, updateInventoryItem, updateStockItem } from "../controllers/stock/Inventory.js";
 import { transferStock } from "../controllers/stock/Stock.js";
 import { createBudget, createAddendumBudget, createBudgetDetails, fetchBudgetWithDetailsById, getBudgets, getBudgetsDetails, getAddendumBudgets, updateBudgetStatus, updateBudgetDetails } from "../controllers/stock/Budget.js";
-import { calculateStoreLogsSales, calculateStoreLogsSalesFilter, getItemStats, getStoreItems, getStoreLogItems, getStoreLogStats, getStoreLogStatsByDateRange, getStoreLogStatsFilter } from "../controllers/Store.js";
+import { calculateStoreLogsSales, calculateStoreLogsSalesFilter, generateReports, getItemStats, getStoreItems, getStoreLogItems, getStoreLogStats, getStoreLogStatsByDateRange, getStoreLogStatsFilter } from "../controllers/Store.js";
 import { createRecipeItem, fetchRecipesByProductId, getAllRecipes, populateStoreLogs } from "../controllers/Recipe.js";
 import { getShoppingItems, removeShopItem, updateShopListItem } from "../controllers/stock/Shoplist.js";
 
@@ -59,6 +59,9 @@ mainRoutes.get('/item_stats', getItemStats)
 mainRoutes.get('/filter_item_stats', getStoreLogStatsByDateRange)
 mainRoutes.get('/filter_stats', getStoreLogStatsFilter)
 mainRoutes.post('/filter_sales', calculateStoreLogsSalesFilter)
+
+//Reports
+mainRoutes.post('/reports', generateReports)
 
 //Addons
 mainRoutes.post('/add-addon', upload.single('addon_image'), createAddon)
