@@ -20,7 +20,15 @@ export const generateReports = async (req, res) => {
     let query;
     switch (reportType) {
       case 'store':
-        query = 'SELECT * FROM store';
+        query = `
+     SELECT 
+    id AS Id, 
+    item_name AS Item, 
+    section AS Section, 
+    amount_in_store AS \`Amount in Store\`, 
+    DATE(updatedAt) AS updatedAt 
+  FROM store
+    `;
         break;
       case 'sales':
         query = 'SELECT * FROM sales WHERE date BETWEEN ? AND ?';
