@@ -2,6 +2,7 @@ import Budget from "../../models/budget.js";
 import budgetDetail from "../../models/budget_detail.js";
 import db from "../../config/database.js";
 import { Sequelize } from "sequelize";
+import { EmailNotification } from "../EmailNotification.js";
 import addendumBudget from "../../models/addendum_budgets.js";
 
 
@@ -24,8 +25,15 @@ export const createBudget = async (req, res) => {
             type: Sequelize.QueryTypes.SELECT
         });
 
-        // Log the new budget response
-        console.log("This is a create budget response", budgetId.id);
+        // Fetch the budget record using the retrieved budgetId
+        const [budget_record] = await db.query("SELECT * FROM budget WHERE id = ?", {
+            replacements: [budgetId.id],
+            type: Sequelize.QueryTypes.SELECT
+        });
+
+        // Call the email notification function with the retrieved budget record
+        await EmailNotification(budget_record);
+
         res.status(200).json({ budget: budgetId.id });
     } catch (error) {
         console.error("Error creating budget:", error);
@@ -34,9 +42,9 @@ export const createBudget = async (req, res) => {
 }
 
 export const createAddendumBudget = async (req, res) => {
-    const { budget_id, remarks,  date, addendum_amount, created_by } = req.body;
+    const { budget_id, remarks, date, addendum_amount, created_by } = req.body;
 
-    console.log("createbudget", budget_id, remarks,  date, addendum_amount, created_by)
+    console.log("createbudget", budget_id, remarks, date, addendum_amount, created_by)
 
     try {
         // Raw SQL Insert Query with Sequelize
@@ -180,36 +188,37 @@ export const updateBudgetDetails = async (req, res) => {
 
         // Update or replace items in the budget
         // for (const section of Object.keys(details)) {
-            for (const item of details) {
-                // Check if the item already exists
-                const existingItem = await budgetDetail.findOne({
-                    where: { budget_id: budgetId, item_name: item.item_name },
-                });
+        for (const item of details) {
+            // Check if the item already exists
+            const existingItem = await budgetDetail.findOne({
+                where: { budget_id: budgetId, item_name: item.item_name },
+            });
 
-                if (existingItem) {
-                    // Update the existing item
-                    await budgetDetail.update(
-                        { quantity: item.quantity,
-                            uom: item.uom,
-                            unit_price: item.unit_price,
-                            total: item.total,
-                            section: item.section
-                         },
-                        { where: { id: existingItem.id } }
-                    );
-                } else {
-                    // Create new item
-                    await budgetDetail.create({
-                        budget_id: budgetId,
-                        item_name: item.item_name,
-                        uom: item.uom,
+            if (existingItem) {
+                // Update the existing item
+                await budgetDetail.update(
+                    {
                         quantity: item.quantity,
+                        uom: item.uom,
                         unit_price: item.unit_price,
                         total: item.total,
-                        section: item.section,
-                    });
-                }
+                        section: item.section
+                    },
+                    { where: { id: existingItem.id } }
+                );
+            } else {
+                // Create new item
+                await budgetDetail.create({
+                    budget_id: budgetId,
+                    item_name: item.item_name,
+                    uom: item.uom,
+                    quantity: item.quantity,
+                    unit_price: item.unit_price,
+                    total: item.total,
+                    section: item.section,
+                });
             }
+        }
         // }
 
         res.json({ message: "Budget updated successfully" });

@@ -33,4 +33,5 @@ const Budget = db.define('budget', {
   freezeTableName: true,
 });
 
+
 export default Budget
