@@ -98,7 +98,7 @@ export const getStoreItems = async (req, res) => {
 // };
 
 export const generateReports = async (req, res) => {
-    const { reportType, filters } = req.body;
+    const { reportType, startDate, endDate } = req.body;
 
     let query;
     let replacements = {};
@@ -118,7 +118,7 @@ export const generateReports = async (req, res) => {
                 break;
 
             case 'sales':
-                if (!filters.startDate || !filters.endDate) {
+                if (!startDate || !endDate) {
                     return res.status(400).json({ message: 'Start and End date filters are required for sales reports.' });
                 }
 
@@ -140,7 +140,7 @@ export const generateReports = async (req, res) => {
                         store_logs.product_name, 
                         store.amount_in_store`;
 
-                replacements = { startDate: filters.startDate, endDate: filters.endDate };
+                replacements = { startDate: startDate, endDate: endDate };
                 break;
 
             default:
