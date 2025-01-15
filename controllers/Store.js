@@ -145,6 +145,39 @@ export const generateReports = async (req, res) => {
                 replacements = { startDate: startDate, endDate: endDate };
                 break;
 
+            case 'sales2':
+                if (!startDate || !endDate) {
+                    return res.status(400).json({ message: 'Start and End date filters are required for sales reports.' });
+                }
+
+                query = `
+                        SELECT 
+                            store_logs.item_name, 
+                            COUNT(store_logs.item_name) AS item_count, 
+                            SUM(store_logs.usage_amount) AS total_usage_amount, 
+                            store_logs.product_name, 
+                            store.amount_in_store,
+                            store.out_date,
+                            items.item_price,
+                            COUNT(store_logs.item_name) * items.item_price AS sales
+                        FROM 
+                            store_logs
+                        JOIN 
+                            store ON store_logs.item_name = store.item_name
+                        JOIN 
+                            items ON store_logs.product_id = items.id
+                         WHERE 
+                            store_logs.out_date BETWEEN :startDate AND :endDate
+                        GROUP BY 
+                            store_logs.item_name, 
+                            store_logs.product_name, 
+                            store.amount_in_store,
+                            store.out_date,
+                            items.item_price`;
+
+                replacements = { startDate: startDate, endDate: endDate };
+                break;
+
             default:
                 return res.status(400).json({ message: 'Invalid report type provided.' });
         }
