@@ -14,30 +14,72 @@ export const getStoreItems = async (req, res) => {
     }
 };
 
+// export const generateReports = async (req, res) => {
+//     const { reportType, filters } = req.body;
+  
+//     let query;
+//     switch (reportType) {
+//       case 'store':
+//         query = 'SELECT id, item_name, section, DATE(updateAt) AS updateAt FROM store';
+//         break;
+//       case 'sales':
+//         query = 'SELECT * FROM sales WHERE date BETWEEN ? AND ?';
+//         break;
+//       default:
+//         return res.status(400).send('Invalid report type');
+//     }
+  
+//     try {
+//       const [rows] = await db.query(query, filters || [], {
+//         type: Sequelize.QueryTypes.SELECT
+//       });
+//       res.json(rows);
+//     } catch (error) {
+//       res.status(500).send('Error generating report');
+//     }
+// }
+
 export const generateReports = async (req, res) => {
     const { reportType, filters } = req.body;
   
     let query;
+    let replacements = [];
+  
     switch (reportType) {
       case 'store':
-        query = 'SELECT id, item_name, section, DATE(updateAt) AS updateAt FROM store';
+        query =
+          'SELECT id, item_name, section, DATE(updateAt) AS updateAt FROM store';
         break;
       case 'sales':
         query = 'SELECT * FROM sales WHERE date BETWEEN ? AND ?';
+        if (filters.startDate && filters.endDate) {
+          replacements = [filters.startDate, filters.endDate];
+        } else {
+          return res.status(400).send('Filters for sales report are missing.');
+        }
         break;
       default:
         return res.status(400).send('Invalid report type');
     }
   
     try {
-      const [rows] = await db.query(query, filters || [], {
-        type: Sequelize.QueryTypes.SELECT
+      // Execute query with replacements if any
+      const [rows] = await db.query(query, {
+        replacements,
+        type: Sequelize.QueryTypes.SELECT,
       });
+  
+      // Log the raw data for debugging
+      console.log('Fetched rows:', rows);
+  
+      // Send response
       res.json(rows);
     } catch (error) {
+      console.error('Error generating report:', error);
       res.status(500).send('Error generating report');
     }
-}
+  };
+  
 
 export const getStoreLogItems = async (req, res) => {
     try {
