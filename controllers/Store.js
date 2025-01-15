@@ -100,6 +100,8 @@ export const getStoreItems = async (req, res) => {
 export const generateReports = async (req, res) => {
     const { reportType, startDate, endDate } = req.body;
 
+    console.log("generate report data", reportType, startDate, endDate)
+
     let query;
     let replacements = {};
 
