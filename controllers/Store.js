@@ -16,7 +16,7 @@ export const getStoreItems = async (req, res) => {
 
 // export const generateReports = async (req, res) => {
 //     const { reportType, filters } = req.body;
-  
+
 //     let query;
 //     switch (reportType) {
 //       case 'store':
@@ -28,7 +28,7 @@ export const getStoreItems = async (req, res) => {
 //       default:
 //         return res.status(400).send('Invalid report type');
 //     }
-  
+
 //     try {
 //       const [rows] = await db.query(query, filters || [], {
 //         type: Sequelize.QueryTypes.SELECT
@@ -39,47 +39,133 @@ export const getStoreItems = async (req, res) => {
 //     }
 // }
 
+// export const generateReports = async (req, res) => {
+//     const { reportType, filters } = req.body;
+
+//     let query;
+//     let replacements = [];
+
+//     switch (reportType) {
+//         case 'store':
+//             query =
+//                 'SELECT id, item_name, section, amount_in_store, DATE(updatedAt) AS updatedAt FROM store';
+//             break;
+//         case 'sales':
+//             // query = 'SELECT * FROM sales WHERE date BETWEEN ? AND ?';
+//             query = `SELECT 
+//                 store_logs.item_name, 
+//                 COUNT(store_logs.item_name) AS item_count, 
+//                 SUM(store_logs.usage_amount) AS total_usage_amount, 
+//                 store_logs.product_name, 
+//                 store.amount_in_store
+//             FROM 
+//                 store_logs
+//             JOIN 
+//                 store ON store_logs.item_name = store.item_name
+//             WHERE 
+//                 store_logs.out_date BETWEEN :startDate AND :endDate
+//             GROUP BY 
+//                 store_logs.item_name, 
+//                 store_logs.product_name, 
+//                 store.amount_in_store
+//         `
+//             if (filters.startDate && filters.endDate) {
+//                 replacements = [filters.startDate, filters.endDate];
+//             } else {
+//                 return res.status(400).send('Filters for sales report are missing.');
+//             }
+//             break;
+//         default:
+//             return res.status(400).send('Invalid report type');
+//     }
+
+//     try {
+//         // Execute query with replacements if any
+//         const [rows] = await db.query(query, {
+//             replacements,
+//             type: Sequelize.QueryTypes.SELECT,
+//         });
+
+//         // Log the raw data for debugging
+//         console.log('Fetched rows:', rows);
+
+//         // Send response
+//         res.json(rows);
+//     } catch (error) {
+//         console.error('Error generating report:', error);
+//         res.status(500).send('Error generating report');
+//     }
+// };
+
 export const generateReports = async (req, res) => {
     const { reportType, filters } = req.body;
-  
+
     let query;
-    let replacements = [];
-  
-    switch (reportType) {
-      case 'store':
-        query =
-          'SELECT id, item_name, section, amount_in_store, DATE(updatedAt) AS updatedAt FROM store';
-        break;
-      case 'sales':
-        query = 'SELECT * FROM sales WHERE date BETWEEN ? AND ?';
-        if (filters.startDate && filters.endDate) {
-          replacements = [filters.startDate, filters.endDate];
-        } else {
-          return res.status(400).send('Filters for sales report are missing.');
-        }
-        break;
-      default:
-        return res.status(400).send('Invalid report type');
-    }
-  
+    let replacements = {};
+
     try {
-      // Execute query with replacements if any
-      const [rows] = await db.query(query, {
-        replacements,
-        type: Sequelize.QueryTypes.SELECT,
-      });
-  
-      // Log the raw data for debugging
-      console.log('Fetched rows:', rows);
-  
-      // Send response
-      res.json(rows);
+        // Select query based on report type
+        switch (reportType) {
+            case 'store':
+                query = `
+                    SELECT 
+                        id, 
+                        item_name, 
+                        section, 
+                        amount_in_store, 
+                        DATE(updatedAt) AS updatedAt 
+                    FROM store`;
+                break;
+
+            case 'sales':
+                if (!filters.startDate || !filters.endDate) {
+                    return res.status(400).json({ message: 'Start and End date filters are required for sales reports.' });
+                }
+
+                query = `
+                    SELECT 
+                        store_logs.item_name, 
+                        COUNT(store_logs.item_name) AS item_count, 
+                        SUM(store_logs.usage_amount) AS total_usage_amount, 
+                        store_logs.product_name, 
+                        store.amount_in_store
+                    FROM 
+                        store_logs
+                    JOIN 
+                        store ON store_logs.item_name = store.item_name
+                    WHERE 
+                        store_logs.out_date BETWEEN :startDate AND :endDate
+                    GROUP BY 
+                        store_logs.item_name, 
+                        store_logs.product_name, 
+                        store.amount_in_store`;
+
+                replacements = { startDate: filters.startDate, endDate: filters.endDate };
+                break;
+
+            default:
+                return res.status(400).json({ message: 'Invalid report type provided.' });
+        }
+
+        // Execute the query with replacements
+        const rows = await db.query(query, {
+            replacements,
+            type: Sequelize.QueryTypes.SELECT,
+        });
+
+        // Log rows for debugging
+        console.log('Fetched rows:', rows);
+
+        // Return results
+        return res.status(200).json(rows);
+
     } catch (error) {
-      console.error('Error generating report:', error);
-      res.status(500).send('Error generating report');
+        console.error('Error generating report:', error);
+        return res.status(500).json({ message: 'An error occurred while generating the report.', error });
     }
-  };
-  
+};
+
+
 
 export const getStoreLogItems = async (req, res) => {
     try {
@@ -164,7 +250,7 @@ export const getItemStats = async (req, res) => {
 }
 
 export const getStoreLogStatsByDateRange = async (req, res) => {
-    const { startDate, endDate } = req.body; 
+    const { startDate, endDate } = req.body;
 
     try {
         // Base query
@@ -216,8 +302,8 @@ export const getStoreLogStatsFilter = async (req, res) => {
             JOIN 
                 store ON store_logs.item_name = store.item_name
             WHERE 
-                1 = 1`; 
-        
+                1 = 1`;
+
         // Initialize replacements object for parameterized query
         const replacements = {};
 
