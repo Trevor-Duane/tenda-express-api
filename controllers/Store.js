@@ -119,7 +119,7 @@ export const generateReports = async (req, res) => {
                     FROM store`;
                 break;
 
-            case 'sales':
+            case 'sales2':
                 if (!startDate || !endDate) {
                     return res.status(400).json({ message: 'Start and End date filters are required for sales reports.' });
                 }
@@ -145,7 +145,7 @@ export const generateReports = async (req, res) => {
                 replacements = { startDate: startDate, endDate: endDate };
                 break;
 
-            case 'sales2':
+            case 'sales':
                 if (!startDate || !endDate) {
                     return res.status(400).json({ message: 'Start and End date filters are required for sales reports.' });
                 }
@@ -157,6 +157,7 @@ export const generateReports = async (req, res) => {
                             SUM(store_logs.usage_amount) AS total_usage_amount, 
                             store_logs.product_name,
                             store_logs.out_date, 
+                            store_logs.kot,
                             store.amount_in_store,
                             items.item_price,
                             COUNT(store_logs.item_name) * items.item_price AS sales
@@ -173,6 +174,7 @@ export const generateReports = async (req, res) => {
                             store_logs.product_name, 
                             store.amount_in_store,
                             store_logs.out_date,
+                            store_logs.kot,
                             items.item_price`;
 
                 replacements = { startDate: startDate, endDate: endDate };
