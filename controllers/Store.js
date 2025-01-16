@@ -111,38 +111,12 @@ export const generateReports = async (req, res) => {
             case 'store':
                 query = `
                     SELECT 
-                        id, 
-                        item_name, 
-                        section, 
-                        amount_in_store, 
-                        DATE(updatedAt) AS updatedAt 
+                        id AS Id, 
+                        item_name AS Store_Item, 
+                        section AS Section, 
+                        amount_in_store AS Amount_In_Store, 
+                        DATE(updatedAt) AS Last_Stockout_Date 
                     FROM store`;
-                break;
-
-            case 'sales2':
-                if (!startDate || !endDate) {
-                    return res.status(400).json({ message: 'Start and End date filters are required for sales reports.' });
-                }
-
-                query = `
-                    SELECT 
-                        store_logs.item_name, 
-                        COUNT(store_logs.item_name) AS item_count, 
-                        SUM(store_logs.usage_amount) AS total_usage_amount, 
-                        store_logs.product_name, 
-                        store.amount_in_store
-                    FROM 
-                        store_logs
-                    JOIN 
-                        store ON store_logs.item_name = store.item_name
-                    WHERE 
-                        store_logs.out_date BETWEEN :startDate AND :endDate
-                    GROUP BY 
-                        store_logs.item_name, 
-                        store_logs.product_name, 
-                        store.amount_in_store`;
-
-                replacements = { startDate: startDate, endDate: endDate };
                 break;
 
             case 'sales':
@@ -172,34 +146,6 @@ export const generateReports = async (req, res) => {
                             store_logs.kot,
                             store_logs.section,
                             items.item_price`;
-
-                // query = `
-                //         SELECT 
-                //             store_logs.item_name, 
-                //             COUNT(store_logs.item_name) AS item_count, 
-                //             SUM(store_logs.usage_amount) AS total_usage_amount, 
-                //             store_logs.product_name,
-                //             store_logs.out_date, 
-                //             store_logs.kot,
-                //             store_logs.section,
-                //             store.amount_in_store,
-                //             items.item_price,
-                //             COUNT(store_logs.item_name) * items.item_price AS sales
-                //         FROM 
-                //             store_logs
-                //         JOIN 
-                //             store ON store_logs.item_name = store.item_name
-                //         JOIN 
-                //             items ON store_logs.product_id = items.id
-                //          WHERE 
-                //             store_logs.out_date BETWEEN :startDate AND :endDate
-                //         GROUP BY 
-                //             store_logs.item_name, 
-                //             store_logs.product_name, 
-                //             store.amount_in_store,
-                //             store_logs.out_date,
-                //             store_logs.kot,
-                //             items.item_price`;
 
                 replacements = { startDate: startDate, endDate: endDate };
                 break;
