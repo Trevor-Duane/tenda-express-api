@@ -152,12 +152,12 @@ export const generateReports = async (req, res) => {
 
                 query = `
                         SELECT 
-                            store_logs.kot,
-                            store_logs.product_name,
-                            COUNT(store_logs.item_name) AS item_count, 
-                            store_logs.item_name, 
-                            store_logs.section,
-                            COUNT(store_logs.item_name) * items.item_price AS sales
+                            store_logs.kot AS KOT,
+                            store_logs.product_name AS Menu_Item,
+                            COUNT(store_logs.item_name) AS Preparations, 
+                            store_logs.item_name AS Recipe_Item, 
+                            store_logs.section AS Section,
+                            COUNT(store_logs.item_name) * items.item_price AS Sales
                         FROM 
                             store_logs
                         JOIN 
