@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import VerificationCodes from "../models/verification_codes.js";
 import Role from "../models/role.js";
 import Permissions from "../models/permissions.js";
 import rolePermissions from "../models/role_permissions.js";
@@ -7,8 +8,66 @@ import bcrypt from "bcryptjs";
 import dotenv from 'dotenv'
 import db from "../config/database.js";
 import { Sequelize } from "sequelize";
+import { RegistrationEmailNotification } from "./RegistrationEmailNotification.js";
 
 // Store refresh tokens
+
+// export const register = async (req, res) => {
+//   const { username, email, mobile, address, password, confirm_password } = req.body;
+//   try {
+//     // Validate user input
+//     if (!username || !email || !mobile || !address || !password || !confirm_password) {
+//       return res.status(400).json({ message: 'All fields are required' });
+//     }
+//     if (password !== confirm_password) {
+//       return res.status(400).json({ message: 'Passwords do not match' });
+//     }
+//     // Check if the user already exists
+//     const existingUser = await User.findOne({ where: { email } });
+//     if (existingUser) {
+//       return res.status(400).json({ message: 'User already exists' });
+//     }
+//     // Hash the password
+//     const hashedPassword = await bcrypt.hash(password, 10);
+//     // Create a new user
+//     const newUser = await User.create({
+//       username,
+//       email,
+//       mobile,
+//       address,
+//       password: hashedPassword,
+//     });
+
+//     // Generate a random 6-digit verification code
+//     const vCode = Math.floor(100000 + Math.random() * 900000); // Generates a 6-digit number
+
+//     // Store the verification code in the VerificationCodes table
+//     await VerificationCodes.create({
+//       userId: newUser.id, // Assuming userId is the foreign key in VerificationCodes table
+//       code: vCode,
+//     });
+
+//     // Fetch the budget record using the retrieved budgetId
+//     const [user_record] = await db.query(
+//       `
+//       SELECT users.username, verification_codes.code
+//       FROM verification_codes
+//       JOIN users ON verification_codes.userId = users.id
+//       WHERE ID = :newId
+//       `, {
+//       replacements: [newUser.id],
+//       type: Sequelize.QueryTypes.SELECT
+//   });
+
+//     await RegistrationEmailNotification(user_record)
+
+//     return res.status(201).json({ success: true, message: 'User registered successfully', user: newUser });
+//   } catch (error) {
+//     console.error('Error registering user:', error);
+//     return res.status(500).json({ message: 'Internal server error' });
+//   }
+
+// }
 
 export const register = async (req, res) => {
   const { username, email, mobile, address, password, confirm_password } = req.body;
@@ -20,13 +79,16 @@ export const register = async (req, res) => {
     if (password !== confirm_password) {
       return res.status(400).json({ message: 'Passwords do not match' });
     }
+
     // Check if the user already exists
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
+
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
+
     // Create a new user
     const newUser = await User.create({
       username,
@@ -35,13 +97,37 @@ export const register = async (req, res) => {
       address,
       password: hashedPassword,
     });
+
+    // Generate a random 6-digit verification code
+    const vCode = Math.floor(100000 + Math.random() * 900000); // Generates a 6-digit number
+
+    // Store the verification code in the VerificationCodes table
+    await VerificationCodes.create({
+      userId: newUser.id, // Assuming userId is the foreign key in VerificationCodes table
+      code: vCode,
+    });
+
+    // Fetch the username and verification code from the database using the userId
+    const [user_record] = await db.query(
+      `
+      SELECT users.username, verification_codes.code
+      FROM verification_codes
+      JOIN users ON verification_codes.userId = users.id
+      WHERE verification_codes.userId = :userId
+      `, {
+      replacements: { userId: newUser.id },
+      type: Sequelize.QueryTypes.SELECT
+    });
+
+    // Send email notification with the verification code and username
+    await RegistrationEmailNotification(user_record);
+
     return res.status(201).json({ success: true, message: 'User registered successfully', user: newUser });
   } catch (error) {
     console.error('Error registering user:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
-
-}
+};
 
 // export const login = async (req, res) => {
 //   const { email, password } = req.body;
@@ -172,7 +258,54 @@ const generateAccessToken = (id) => {
 //   });
 // };
 
+export const verifyUserCode = async (req, res) => {
+  const { email, code } = req.body;  // Expecting the email and code to be in the request body
+  
+  try {
+    // 1. Validate input
+    if (!email || !code) {
+      return res.status(400).json({ message: 'Email and verification code are required' });
+    }
 
+    // 2. Find the user by email
+    const user = await User.findOne({ where: { email } });
+    console.log("*********************user*******************************")
+    console.log(user)
+    console.log("*********************user*******************************")
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // 3. Find the latest verification code for the user
+    const verificationCode = await VerificationCodes.findOne({
+      where: { userId: user.id },
+    });
+
+    console.log("*********************code*******************************")
+    console.log(verificationCode)
+    console.log("*********************code*******************************")
+    
+    if (!verificationCode) {
+      return res.status(404).json({ message: 'Verification code not found' });
+    }
+
+    // 4. Compare the provided code with the stored verification code
+    if (verificationCode.code !== code) {
+      return res.status(400).json({ message: 'Invalid verification code' });
+    }
+
+    // 5. Update the user's 'isVerified' field to 1
+    user.isVerified = 1;  // Assuming 'isVerified' is a field in your User model
+    await user.save();  // Save the updated user record
+
+    // 6. Respond with success
+    return res.status(200).json({ message: 'User verified successfully' });
+
+  } catch (error) {
+    console.error('Error verifying user code:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
 
 export const findUserById = async (req, res) => {
 

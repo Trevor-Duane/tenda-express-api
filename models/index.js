@@ -4,6 +4,8 @@ import Item from "./item.js";
 import Store from "./store.js";
 import Recipe from "./recipes.js";
 import shoppingList from "./shopping_list.js";
+import VerificationCodes from "./verification_codes.js";
+import User from "./user.js";
 
 Subcategory.belongsTo(Category, { foreignKey: 'category_id' });
 Category.hasMany(Subcategory, { foreignKey: 'category_id', onUpdate: 'CASCADE' });
@@ -21,6 +23,9 @@ Store.hasMany(Recipe, { foreignKey: 'store_id', onUpdate: 'CASCADE' });
 
 Store.belongsTo(shoppingList, { foreignKey: 'shopping_list_id' });
 shoppingList.hasMany(Store, { foreignKey: 'shopping_list_id', onUpdate: 'CASCADE'})
+
+VerificationCodes.belongsTo(User, {foreignKey: 'userId'})
+User.hasMany(VerificationCodes,{foreignKey: 'userId'})
 
 
 
