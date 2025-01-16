@@ -155,9 +155,9 @@ export const generateReports = async (req, res) => {
                             store_logs.item_name, 
                             COUNT(store_logs.item_name) AS item_count, 
                             SUM(store_logs.usage_amount) AS total_usage_amount, 
-                            store_logs.product_name, 
+                            store_logs.product_name,
+                            store_logs.out_date, 
                             store.amount_in_store,
-                            store.out_date,
                             items.item_price,
                             COUNT(store_logs.item_name) * items.item_price AS sales
                         FROM 
@@ -172,7 +172,7 @@ export const generateReports = async (req, res) => {
                             store_logs.item_name, 
                             store_logs.product_name, 
                             store.amount_in_store,
-                            store.out_date,
+                            store_logs.out_date,
                             items.item_price`;
 
                 replacements = { startDate: startDate, endDate: endDate };
