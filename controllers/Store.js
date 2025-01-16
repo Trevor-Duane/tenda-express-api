@@ -176,6 +176,7 @@ export const generateReports = async (req, res) => {
                             store.amount_in_store,
                             store_logs.out_date,
                             store_logs.kot,
+                            store_logs.section,
                             items.item_price`;
 
                 replacements = { startDate: startDate, endDate: endDate };
