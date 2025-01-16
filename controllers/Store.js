@@ -158,6 +158,7 @@ export const generateReports = async (req, res) => {
                             store_logs.product_name,
                             store_logs.out_date, 
                             store_logs.kot,
+                            store_logs.section,
                             store.amount_in_store,
                             items.item_price,
                             COUNT(store_logs.item_name) * items.item_price AS sales
