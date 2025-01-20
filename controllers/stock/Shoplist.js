@@ -7,7 +7,8 @@ export const getShoppingItems = async (req, res) => {
             include: {
                 model: Store,
                 attributes: ['id', 'amount_in_store']
-            }
+            },
+            order: [['item_name', 'ASC']]
         })
         return res.status(200).json({ success: true, data: items })
     } catch (error) {

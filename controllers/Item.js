@@ -46,7 +46,8 @@ export const getAllItems = async (req, res) => {
                         attributes: ['id', "item_name",  "amount_in_store"]
                     }
                 }
-                    ]
+                    ],
+                    order: [['item_name', 'ASC']]
             });
         res.status(200).json({ success: true, data: items })
     }
