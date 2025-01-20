@@ -218,30 +218,41 @@ export const login = async (req, res) => {
   }
 };
 
-// export const login = async (req, res) => {
-//   const { email, password } = req.body;
-//   try {
-//     const user = await User.findOne({email});
-//     console.log("This is the user", user)
+export const updateUserRole = async (req, res) => {
+  const { email, user_role } = req.body;
 
-//     if (!user) {
-//       return res.status(401).json({ success: false, message: "User doesn't exist" })
-//     }
+  try {
+    // Validate user input
+    if (!email || !user_role) {
+      return res.status(400).json({ message: 'Email and user_role are required' });
+    }
 
-//     const isMatch = await bcrypt.compare(password, user.password);
+    // Validate that the user_role is one of the allowed values (1-6)
+    const validRoles = [1, 2, 3, 4, 5, 6];
+    if (!validRoles.includes(Number(user_role))) {
+      return res.status(400).json({ message: 'Invalid user_role' });
+    }
 
-//     if (!isMatch) {
-//       return res.status(401).json({ success: false, message: "Invalid credentials" })
-//     }
+    // Check if the user exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (!existingUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-//     const token = generateAccessToken(user.id);
-//     res.status(200).json({ success: true, token, user:user });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({ success: false, message: 'Internal server error' });
-//   }
+    // Update the user's user_role
+    existingUser.user_role = user_role;
+    await existingUser.save();
 
-// }
+    return res.status(200).json({
+      success: true,
+      message: 'User user_role updated successfully',
+      user: existingUser,
+    });
+  } catch (error) {
+    console.error('Error updating user user_role:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
 
 const generateAccessToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET)
@@ -269,9 +280,6 @@ export const verifyUserCode = async (req, res) => {
 
     // 2. Find the user by email
     const user = await User.findOne({ where: { email } });
-    console.log("*********************user*******************************")
-    console.log(user)
-    console.log("*********************user*******************************")
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -280,10 +288,6 @@ export const verifyUserCode = async (req, res) => {
     const verificationCode = await VerificationCodes.findOne({
       where: { userId: user.id },
     });
-
-    console.log("*********************code*******************************")
-    console.log(verificationCode)
-    console.log("*********************code*******************************")
     
     if (!verificationCode) {
       return res.status(404).json({ message: 'Verification code not found' });
@@ -348,42 +352,6 @@ export const updateProfileImage = async (req, res) => {
   }
 
 }
-
-// export const updateUserPassword = async (req, res) => {
-//   const { userId, currentPassword, newPassword } = req.body;
-
-//   try {
-//     // Find the user in the database
-//     const user = await User.findByPk(userId);
-//     console.log("this is the user i found", user)
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     // Verify if the current password is correct
-//     const isMatch = await bcrypt.compare(currentPassword, user.password);
-//     if (!isMatch) {
-//       return res.status(401).json({ message: "Current password is incorrect" });
-//     }
-
-//     // Hash the new password
-//     // Hash the password
-//     const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-//     // Update the password in the database
-//     await User.update(
-//       { password: hashedPassword },
-//       { where: { id: userId } }
-//     );
-
-//     res.status(200).json({
-//       message: "Password updated successfully. Please log in again.",
-//     });
-//   } catch (error) {
-//     console.error("Error changing password:", error);
-//     res.status(500).json({ message: "An error occurred. Please try again." });
-//   }
-// };
 
 export const updateUserPassword = async (req, res) => {
   const { userId, currentPassword, newPassword } = req.body;

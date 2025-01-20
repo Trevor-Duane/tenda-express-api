@@ -12,7 +12,7 @@ module.exports = {
       },
       user_role:{
         type: Sequelize.INTEGER,
-        defaultValue: 1,
+        defaultValue: 6,
         references:{
           model: "roles",
           key: "id"
