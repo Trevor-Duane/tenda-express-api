@@ -296,7 +296,7 @@ export const verifyUserCode = async (req, res) => {
 
     // 5. Update the user's 'isVerified' field to 1
     user.isVerified = 1;  // Assuming 'isVerified' is a field in your User model
-    user.isVerifiedAt = new Date();
+    user.verifiedAt = new Date();
     await user.save();  // Save the updated user record
 
     // 6. Respond with success

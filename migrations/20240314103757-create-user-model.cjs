@@ -48,7 +48,7 @@ module.exports = {
         allowNull: true,
         defaultValue: 0
       },
-      verirfiedAt: {
+      verifiedAt: {
         type: Sequelize.DATE,
         allowNull: true
       },

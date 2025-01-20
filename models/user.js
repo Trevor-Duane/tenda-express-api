@@ -35,6 +35,11 @@ const User = db.define('users', {
       type: DataTypes.INTEGER,
       allowNull: true
     },
+    verifiedAt: {
+      type: DataTypes.DATE,
+      allowNull: true
+
+    }
   },
   {
     freezeTableName:true
