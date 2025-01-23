@@ -227,3 +227,26 @@ export const updateBudgetDetails = async (req, res) => {
         res.status(500).json({ error: "Error updating budget" });
     }
 }
+
+export const removeBudgetDetailItem = async (req, res) => {
+    try {
+      const { section, itemId } = req.body; // Get section and itemId from the URL params
+  
+      // Find and delete the BudgetDetail item from the database
+      const deletedItem = await budgetDetail.destroy({
+        where: {
+          section,
+          id: itemId,
+        },
+      });
+  
+      if (deletedItem === 0) {
+        return res.status(404).json({ message: 'Item not found' });
+      }
+  
+      return res.status(200).json({ success: true, message: 'Item deleted successfully' });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ success: false, message: 'Error deleting item', error });
+    }
+  };
