@@ -96,7 +96,7 @@ mainRoutes.delete('/remove_inventory/:id', removeInventoryItem);
 mainRoutes.get("/list_shopping_items", getShoppingItems)
 mainRoutes.delete('/remove_shop_item/:id', removeShopItem);
 mainRoutes.put('/update_shoplist_item/:id', updateShopListItem)
-mainRoutes.post('/add_shoplist_item')
+mainRoutes.post('/add_shoplist_item', addStock)
 
 //stock
 mainRoutes.get('/list_stock', getStockItems)

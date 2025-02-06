@@ -32,7 +32,7 @@ export const createBudget = async (req, res) => {
         });
 
         // Call the email notification function with the retrieved budget record
-        await EmailNotification(budget_record);
+        // await EmailNotification(budget_record);
 
         res.status(200).json({ budget: budgetId.id });
     } catch (error) {

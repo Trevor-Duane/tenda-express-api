@@ -70,6 +70,7 @@ export const updateShopListItem = async (req, res) => {
 
 // Controller for adding shoplist item
 export const addStock = async (req, res) => {
+    console.log("Shoplist body", req.body)
     try {
         const { item_name, section, uom, unit_price, } = req.body;
 
