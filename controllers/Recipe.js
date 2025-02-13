@@ -2,6 +2,7 @@ import Recipe from "../models/recipes.js";
 import multer from "multer";
 import { Item, Store } from "../models/index.js"
 import StoreLog from "../models/store_logs.js";
+import Sales from "../models/sales.js";
 
 export const createRecipeItem = async (req, res) => {
         const {store_id, product_id, usage_amount, uom} = req.body;
@@ -71,10 +72,10 @@ export const fetchRecipesByProductId = async (req, res) => {
 }
 
 export const populateStoreLogs = async (req, res) => {
-    const { kot, out_date, product_id, username } = req.body; // Simplified the input fields
+    const { kot, out_date, product_id, username, qty } = req.body; // Simplified the input fields
     try {
         // Validate the request body
-        if (!kot || !out_date || !product_id || !username) {
+        if (!kot || !out_date || !product_id || !username || !qty) {
             return res.status(400).json({ error: "All fields are required" });
         }
 
@@ -88,7 +89,7 @@ export const populateStoreLogs = async (req, res) => {
                 },
                 {
                   model: Item,
-                  attributes: ['item_name']
+                  attributes: ['item_name', 'item_price']
                 }
               ],
         });
@@ -99,14 +100,13 @@ export const populateStoreLogs = async (req, res) => {
         for (const recipe of recipes) {
 
             const { amount_in_store, item_name, uom, section} = recipe.store; 
+            const { item_name: product_name, item_price } = recipe.item
 
-            console.log("reciepe-------->store", recipe.store)
-            const { item_name: product_name } = recipe.item
+            // Multiply the usage_amount by the quantity (qty)
+            const total_usage_amount = recipe.usage_amount * qty;
 
-            console.log("item-------->store", recipe.item)
-            
             // Calculate the amount left in store
-            const leftin_store = amount_in_store - recipe.usage_amount;
+            const leftin_store = amount_in_store - total_usage_amount;
 
             // Update the store amount in the store table
             await Store.update(
@@ -118,15 +118,29 @@ export const populateStoreLogs = async (req, res) => {
             await StoreLog.create({
                 kot,
                 out_date,
+                quantity: qty,
                 item_name,
                 product_id,
-                product_name: product_name, // Assuming this is accessible from recipe
-                section: section, // Assuming this is accessible from recipe
-                usage_amount: recipe.usage_amount,
+                product_name: product_name,
+                section: section, 
+                usage_amount: total_usage_amount,
                 uom: uom,
                 leftin_store,
                 username
             });
+            //calculate the total sales amount
+            const total_sale_amount = item_price * qty
+
+            //populate the sales table
+            await Sales.create({
+                kot,
+                sale_date,
+                item_name: product_name,
+                item_price,
+                quantity: qty,
+                amount: total_sale_amount
+
+            })   
         }
 
         // Respond with a success message
@@ -138,10 +152,10 @@ export const populateStoreLogs = async (req, res) => {
 };
 
 // export const populateStoreLogs = async (req, res) => {
-//     const { out_date, product_id, username } = req.body; // Simplified the input fields
+//     const { kot, out_date, product_id, username, qty } = req.body; // Simplified the input fields
 //     try {
 //         // Validate the request body
-//         if (!out_date || !product_id || !username) {
+//         if (!kot || !out_date || !product_id || !username || !qty) {
 //             return res.status(400).json({ error: "All fields are required" });
 //         }
 
@@ -150,35 +164,30 @@ export const populateStoreLogs = async (req, res) => {
 //             where: { product_id: product_id },
 //             include: [
 //                 {
-//                     model: Store,
-//                     attributes: ['item_name', 'section', 'uom', 'amount_in_store'],
+//                   model: Store,
+//                   attributes: ['item_name', 'amount_in_store', 'uom', 'section'], 
 //                 },
 //                 {
-//                     model: Item,
-//                     attributes: ['item_name'],
-//                 },
-//             ],
+//                   model: Item,
+//                   attributes: ['item_name']
+//                 }
+//               ],
 //         });
 
-//         console.log("store logs recipes", recipes);
+//         console.log("store logs recipes", recipes)
 
 //         // Loop through the fetched recipes
 //         for (const recipe of recipes) {
-//             const { amount_in_store, item_name, uom } = recipe.Store || {}; // Fallback to an empty object
-//             const { item_name: product_name } = recipe.Item || {}; // Fallback to an empty object
+
+//             const { amount_in_store, item_name, uom, section} = recipe.store; 
+
+//             console.log("reciepe-------->store", recipe.store)
+//             const { item_name: product_name } = recipe.item
+
+//             console.log("item-------->store", recipe.item)
             
-//             if (!item_name || !product_name) {
-//                 console.error("Missing item or product name for recipe:", recipe);
-//                 continue; // Skip this recipe if item or product name is missing
-//             }
-
-//             const usage_amount = recipe.usage_amount; // Ensure this is defined in your Recipe model
-//             const leftin_store = amount_in_store - usage_amount;
-
-//             // Check if there's enough stock
-//             if (leftin_store < 0) {
-//                 return res.status(400).json({ error: `Not enough stock for ${product_name}` });
-//             }
+//             // Calculate the amount left in store
+//             const leftin_store = amount_in_store - recipe.usage_amount;
 
 //             // Update the store amount in the store table
 //             await Store.update(
@@ -188,15 +197,16 @@ export const populateStoreLogs = async (req, res) => {
 
 //             // Create a log for the stock out
 //             await StoreLog.create({
+//                 kot,
 //                 out_date,
 //                 item_name,
 //                 product_id,
-//                 product_name,
-//                 section: recipe.section, // Assuming this is accessible from recipe
-//                 usage_amount,
-//                 uom,
+//                 product_name: product_name, // Assuming this is accessible from recipe
+//                 section: section, // Assuming this is accessible from recipe
+//                 usage_amount: recipe.usage_amount,
+//                 uom: uom,
 //                 leftin_store,
-//                 username,
+//                 username
 //             });
 //         }
 
@@ -207,4 +217,3 @@ export const populateStoreLogs = async (req, res) => {
 //         return res.status(500).json({ message: error.message });
 //     }
 // };
-

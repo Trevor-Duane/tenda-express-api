@@ -13,12 +13,12 @@ import { getPayments, storePayment } from "../controllers/Payment.js";
 import { resetPassword, requestPasswordReset } from "../controllers/Passwords.js";
 import { findAllUsers } from "../controllers/User.js";
 import { fetchUsers } from "../controllers/Test.js";
-import { addInventory, addStock, getInventoryItems, getStockItems, removeInventoryItem, removeStockItem, updateInventoryItem, updateStockItem } from "../controllers/stock/Inventory.js";
+import { addInventory, getInventoryItems, getStockItems, removeInventoryItem, removeStockItem, updateInventoryItem, updateStockItem } from "../controllers/stock/Inventory.js";
 import { transferStock } from "../controllers/stock/Stock.js";
 import { createBudget, createAddendumBudget, createBudgetDetails, fetchBudgetWithDetailsById, getBudgets, getBudgetsDetails, getAddendumBudgets, updateBudgetStatus, updateBudgetDetails, removeBudgetDetailItem } from "../controllers/stock/Budget.js";
 import { calculateStoreLogsSales, calculateStoreLogsSalesFilter, generateReports, getItemStats, getStoreItems, getStoreLogItems, getStoreLogStats, getStoreLogStatsByDateRange, getStoreLogStatsFilter } from "../controllers/Store.js";
 import { createRecipeItem, fetchRecipesByProductId, getAllRecipes, populateStoreLogs } from "../controllers/Recipe.js";
-import { getShoppingItems, removeShopItem, updateShopListItem } from "../controllers/stock/Shoplist.js";
+import { getShoppingItems, removeShopItem, updateShopListItem, addStock } from "../controllers/stock/Shoplist.js";
 
 const mainRoutes = express.Router();
 
@@ -101,7 +101,7 @@ mainRoutes.post('/add_shoplist_item', addStock)
 //stock
 mainRoutes.get('/list_stock', getStockItems)
 mainRoutes.put('/update_stock/:id', updateStockItem);
-mainRoutes.post("/add_stock", addStock);
+// mainRoutes.post("/add_stock", addStock);
 mainRoutes.delete('/remove_stock/:id', removeStockItem);
 
 mainRoutes.post('/stock_movement', transferStock)
