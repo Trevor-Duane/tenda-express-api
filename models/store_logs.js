@@ -13,6 +13,10 @@ const StoreLog = db.define('store_logs', {
     allowNull: false,
     type: DataTypes.DATEONLY
   },
+  quantity: {
+    allowNull: false,
+    type: DataTypes.INTEGER
+  },
   item_name: {
     allowNull: false,
     type: DataTypes.STRING

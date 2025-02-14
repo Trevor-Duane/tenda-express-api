@@ -73,6 +73,9 @@ export const fetchRecipesByProductId = async (req, res) => {
 
 export const populateStoreLogs = async (req, res) => {
     const { kot, out_date, product_id, username, qty } = req.body; // Simplified the input fields
+
+    console.log("New Stock Input", req.body)
+
     try {
         // Validate the request body
         if (!kot || !out_date || !product_id || !username || !qty) {
