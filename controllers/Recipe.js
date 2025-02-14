@@ -137,7 +137,7 @@ export const populateStoreLogs = async (req, res) => {
             //populate the sales table
             await Sales.create({
                 kot,
-                sale_date,
+                sale_date: out_date,
                 item_name: product_name,
                 item_price,
                 quantity: qty,
