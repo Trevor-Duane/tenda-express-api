@@ -15,7 +15,7 @@ import { findAllUsers } from "../controllers/User.js";
 import { fetchUsers } from "../controllers/Test.js";
 import { addInventory, getInventoryItems, getStockItems, removeInventoryItem, removeStockItem, updateInventoryItem, updateStockItem } from "../controllers/stock/Inventory.js";
 import { transferStock } from "../controllers/stock/Stock.js";
-import { createBudget, createAddendumBudget, createBudgetDetails, fetchBudgetWithDetailsById, getBudgets, getBudgetsDetails, getAddendumBudgets, updateBudgetStatus, updateBudgetDetails, removeBudgetDetailItem } from "../controllers/stock/Budget.js";
+import { createBudget, createAddendumBudget, createBudgetDetails, fetchBudgetWithDetailsById, getBudgets, getBudgetsDetails, getAddendumBudgets, updateBudgetStatus, updateBudgetDetails, removeBudgetDetailItem, shareSelectedBudget } from "../controllers/stock/Budget.js";
 import { calculateStoreLogsSales, calculateStoreLogsSalesFilter, generateReports, getItemStats, getStoreItems, getStoreLogItems, getStoreLogStats, getStoreLogStatsByDateRange, getStoreLogStatsFilter } from "../controllers/Store.js";
 import { createRecipeItem, fetchRecipesByProductId, getAllRecipes, populateStoreLogs } from "../controllers/Recipe.js";
 import { getShoppingItems, removeShopItem, updateShopListItem, addStock } from "../controllers/stock/Shoplist.js";
@@ -117,6 +117,7 @@ mainRoutes.post('/create_budget_details', createBudgetDetails)
 mainRoutes.get('/get_budget/:id', fetchBudgetWithDetailsById)
 mainRoutes.put('/update_budget/:id', updateBudgetDetails)
 mainRoutes.post('/remove_detail_item', removeBudgetDetailItem)
+mainRoutes.post('/share_budget', shareSelectedBudget)
 
 //Offers
 mainRoutes.get('/offers', getAllOffers)

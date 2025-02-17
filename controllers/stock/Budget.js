@@ -250,3 +250,23 @@ export const removeBudgetDetailItem = async (req, res) => {
       return res.status(500).json({ success: false, message: 'Error deleting item', error });
     }
   };
+
+  export const shareSelectedBudget = async (req, res) => {
+    try {
+        const { budget_id } = req.body
+
+        // Fetch the budget record using the retrieved budgetId
+        const [budget_record] = await db.query("SELECT * FROM budget WHERE id = ?", {
+            replacements: [budget_id],
+            type: Sequelize.QueryTypes.SELECT
+        });
+
+        // Call the email notification function with the retrieved budget record
+        await EmailNotification(budget_record);
+
+    } catch (error) {
+        console.error("Error sharing budget:", error);
+        res.status(500).json({ success: false, message: "Error sharing budget." });
+        
+    }
+  }
