@@ -52,7 +52,7 @@ export const findAllSalesData = async (req, res) => {
 export const getTopSellingItems = async (req, res) => {
     try {
         const result = await db.query(
-            `SELECT item_name, kot, SUM(amount) AS total_sales
+            `SELECT item_name, SUM(amount) AS total_sales
              FROM sales
              GROUP BY item_name
              ORDER BY total_sales DESC
@@ -60,7 +60,7 @@ export const getTopSellingItems = async (req, res) => {
             { type: Sequelize.QueryTypes.SELECT }
         );
 
-        res.status(200).json(result);
+        res.status(200).json({data:result});
     } catch (error) {
         console.error("Error fetching top-selling items:", error);
         res.status(500).json({ message: "Internal Server Error" });
