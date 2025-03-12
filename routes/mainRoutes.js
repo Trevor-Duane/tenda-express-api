@@ -19,6 +19,7 @@ import { createBudget, createAddendumBudget, createBudgetDetails, fetchBudgetWit
 import { calculateStoreLogsSales, calculateStoreLogsSalesFilter, generateReports, getItemStats, getStoreItems, getStoreLogItems, getStoreLogStats, getStoreLogStatsByDateRange, getStoreLogStatsFilter } from "../controllers/Store.js";
 import { createRecipeItem, fetchRecipesByProductId, getAllRecipes, populateStoreLogs } from "../controllers/Recipe.js";
 import { getShoppingItems, removeShopItem, updateShopListItem, addStock } from "../controllers/stock/Shoplist.js";
+import { findAllSalesData, getDailySales, getTopSellingItems, getTotalRevenue } from "../controllers/Sales.js";
 
 const mainRoutes = express.Router();
 
@@ -127,6 +128,11 @@ mainRoutes.get('/offer/:id/', findOfferById)
 mainRoutes.post('/offer', upload.single('offer_cover'), createOffer)
 
 mainRoutes.get('/test', fetchUsers)
+
+mainRoutes.get('/daily_sales', getDailySales)
+mainRoutes.get('/total_revenue', getTotalRevenue)
+mainRoutes.get('/top_selling', getTopSellingItems)
+mainRoutes.get('/total_orders', findAllSalesData)
 
 
 
