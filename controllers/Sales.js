@@ -8,7 +8,7 @@ export const getDailySales = async (req, res) => {
             `SELECT sale_date AS date, SUM(amount) AS total_amount
             FROM sales
             GROUP BY date
-            ORDER BY date ASC
+            ORDER BY date DESC
             LIMIT 5;`, {
             type: Sequelize.QueryTypes.SELECT
         });
