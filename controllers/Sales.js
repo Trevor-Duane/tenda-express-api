@@ -8,13 +8,16 @@ export const getDailySales = async (req, res) => {
             `SELECT sale_date AS date, SUM(amount) AS total_amount
             FROM sales
             GROUP BY date
-            ORDER BY date ASC
+            ORDER BY date DESC
             LIMIT 5;`, {
             type: Sequelize.QueryTypes.SELECT
         });
 
-        // Format to match required structure
-        const formattedData = sales_data.map(row => ({
+        // Sort the data by date in ascending order
+        const sortedData = sales_data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        // Format to match the required structure
+        const formattedData = sortedData.map(row => ({
             date: row.date,
             amount: row.total_amount
         }));
