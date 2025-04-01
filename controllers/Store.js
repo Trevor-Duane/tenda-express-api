@@ -14,6 +14,34 @@ export const getStoreItems = async (req, res) => {
     }
 };
 
+export const calculateStockLevels = async (req, res) => {
+    const items = await db.query(`SELECT id, item_name FROM items`, { type: Sequelize.QueryTypes.SELECT });
+    let stockLevels = [];
+
+    for (let item of items) {
+        const recipe = await db.query(`SELECT store.amount_in_store, recipe.usage_amount FROM recipe JOIN store ON recipe.store_id = store.id WHERE recipe.product_id = :item_id`, { replacements: {item_id: item.id}, type: Sequelize.QueryTypes.SELECT });
+
+        let minPortions = Infinity;
+        for (let ingredient of recipe) {
+            let possiblePortions = Math.floor(ingredient.amount_in_store / ingredient.usage_amount);
+            minPortions = Math.min(minPortions, possiblePortions);
+        }
+
+        stockLevels.push({ item_name: item.item_name, max_portions: minPortions })
+    }
+
+    return res.status(200).json({data: stockLevels});
+}
+
+
+
+
+
+
+
+
+
+
 // export const generateReports = async (req, res) => {
 //     const { reportType, filters } = req.body;
 

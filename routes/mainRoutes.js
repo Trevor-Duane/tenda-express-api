@@ -16,7 +16,7 @@ import { fetchUsers } from "../controllers/Test.js";
 import { addInventory, getInventoryItems, getStockItems, removeInventoryItem, removeStockItem, updateInventoryItem, updateStockItem } from "../controllers/stock/Inventory.js";
 import { transferStock } from "../controllers/stock/Stock.js";
 import { createBudget, createAddendumBudget, createBudgetDetails, fetchBudgetWithDetailsById, getBudgets, getBudgetsDetails, getAddendumBudgets, updateBudgetStatus, updateBudgetDetails, removeBudgetDetailItem, shareSelectedBudget } from "../controllers/stock/Budget.js";
-import { calculateStoreLogsSales, calculateStoreLogsSalesFilter, generateReports, getItemStats, getStoreItems, getStoreLogItems, getStoreLogStats, getStoreLogStatsByDateRange, getStoreLogStatsFilter } from "../controllers/Store.js";
+import { calculateStockLevels, calculateStoreLogsSales, calculateStoreLogsSalesFilter, generateReports, getItemStats, getStoreItems, getStoreLogItems, getStoreLogStats, getStoreLogStatsByDateRange, getStoreLogStatsFilter } from "../controllers/Store.js";
 import { createRecipeItem, fetchRecipesByProductId, getAllRecipes, populateStoreLogs } from "../controllers/Recipe.js";
 import { getShoppingItems, removeShopItem, updateShopListItem, addStock } from "../controllers/stock/Shoplist.js";
 import { findAllSalesData, getDailySales, getTopSellingItems, getTotalRevenue } from "../controllers/Sales.js";
@@ -102,6 +102,7 @@ mainRoutes.post('/add_shoplist_item', addStock)
 //stock
 mainRoutes.get('/list_stock', getStockItems)
 mainRoutes.put('/update_stock/:id', updateStockItem);
+mainRoutes.get('/stock_levels', calculateStockLevels)
 // mainRoutes.post("/add_stock", addStock);
 mainRoutes.delete('/remove_stock/:id', removeStockItem);
 
