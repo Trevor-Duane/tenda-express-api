@@ -30,7 +30,8 @@ export const calculateStockLevels = async (req, res) => {
         stockLevels.push({ item_name: item.item_name, max_portions: minPortions })
     }
 
-    return res.status(200).json({data: stockLevels});
+    // return res.status(200).json({data: stockLevels});
+    return res.status(200).json(stockLevels);
 }
 
 
