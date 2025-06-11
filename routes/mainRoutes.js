@@ -20,6 +20,8 @@ import { calculateStockLevels, calculateStoreLogsSales, calculateStoreLogsSalesF
 import { createRecipeItem, fetchRecipesByProductId, getAllRecipes, populateStoreLogs } from "../controllers/Recipe.js";
 import { getShoppingItems, removeShopItem, updateShopListItem, addStock } from "../controllers/stock/Shoplist.js";
 import { findAllSalesData, getDailySales, getTopSellingItems, getTotalRevenue } from "../controllers/Sales.js";
+import { createSuitesBooking, getSuiteBookingById, getSuitesBooking } from "../controllers/suites/Booking.js";
+import { createRoom, getRoomById, getRooms, updateRoom } from "../controllers/suites/Rooms.js";
 
 const mainRoutes = express.Router();
 
@@ -134,6 +136,18 @@ mainRoutes.get('/daily_sales', getDailySales)
 mainRoutes.get('/total_revenue', getTotalRevenue)
 mainRoutes.get('/top_selling', getTopSellingItems)
 mainRoutes.get('/total_orders', findAllSalesData)
+
+
+//suites - bookings
+mainRoutes.post("/booking", createSuitesBooking)
+mainRoutes.get("/booking/:id", getSuiteBookingById)
+mainRoutes.get("/bookings", getSuitesBooking)
+
+//suites - rooms
+mainRoutes.post("/room", createRoom)
+mainRoutes.get("/room/:id", getRoomById)
+mainRoutes.get("/rooms", getRooms)
+mainRoutes.patch("/room/:id", updateRoom)
 
 
 
