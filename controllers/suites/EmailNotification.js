@@ -4,12 +4,12 @@ import db from "../../config/database.js";
 
 export const sendBookingNotificationEmail = async (booking) => {
     try {
-        
+    
         const emails = ["namugera@gmail.com", "trevorkayiira@gmail.com"];
 
         const mailOptions = {
             from: `"Tenda Suites Booking" <${process.env.EMAIL_USER}>`,
-            to: "trevorkayiira@gmail.com",
+            to: emails.join(", "),
             subject: `New Booking from ${booking.first_name} ${booking.last_name}`,
             html: `
             <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9f9f9; padding: 30px 0;">
