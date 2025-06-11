@@ -4,21 +4,12 @@ import db from "../../config/database.js";
 
 export const sendBookingNotificationEmail = async (booking) => {
     try {
-        // Fetch admin users/emails from DB (adjust query as needed)
-        const users = await db.query("SELECT * FROM users WHERE role = 'admin'", {
-            type: Sequelize.QueryTypes.SELECT,
-        });
-
-        if (!Array.isArray(users) || users.length === 0) {
-            console.log("No admin users found to notify.");
-            return;
-        }
-
+        
         const emails = ["namugera@gmail.com", "trevorkayiira@gmail.com"];
 
         const mailOptions = {
             from: `"Tenda Suites Booking" <${process.env.EMAIL_USER}>`,
-            to: emails.join(", "),
+            to: "trevorkayiira@gmail.com",
             subject: `New Booking from ${booking.first_name} ${booking.last_name}`,
             html: `
             <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9f9f9; padding: 30px 0;">
