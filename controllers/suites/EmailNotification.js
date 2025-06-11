@@ -1,6 +1,6 @@
-import transporter from "../middlewares/emailTransporter.js";
+import transporter from "../../middlewares/emailTransporter.js";
 import { Sequelize } from "sequelize";
-import db from "../config/database.js";
+import db from "../../config/database.js";
 
 export const sendBookingNotificationEmail = async (booking) => {
     try {
