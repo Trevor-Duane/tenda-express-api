@@ -22,6 +22,8 @@ import { getShoppingItems, removeShopItem, updateShopListItem, addStock } from "
 import { findAllSalesData, getDailySales, getTopSellingItems, getTotalRevenue } from "../controllers/Sales.js";
 import { createSuitesBooking, getSuiteBookingById, getSuitesBooking } from "../controllers/suites/Booking.js";
 import { createRoom, getRoomById, getRooms, updateRoom } from "../controllers/suites/Rooms.js";
+import { getAllApplications, submitApplication } from "../controllers/tendaafrica/Application.js";
+import { getAllRequests, submitInfoRequest } from "../controllers/tendaafrica/Request.js";
 
 const mainRoutes = express.Router();
 
@@ -149,6 +151,13 @@ mainRoutes.get("/room/:id", getRoomById)
 mainRoutes.get("/rooms", getRooms)
 mainRoutes.patch("/room/:id", updateRoom)
 
+
+//tendaafrica
+mainRoutes.post("/application", submitApplication)
+mainRoutes.get("/applications", getAllApplications)
+
+mainRoutes.post("/request", submitInfoRequest)
+mainRoutes.get("/requests", getAllRequests)
 
 
 export default mainRoutes;
