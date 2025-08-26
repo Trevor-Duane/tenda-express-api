@@ -3,7 +3,7 @@ import multer from "multer";
 
 export const submitInfoRequest = async (req, res) => {
     try {
-        const { fullName, email, viewedCourse, additionalInfo } = req.body;
+        const { fullName, email, viewedCourse, additionalInfo, phoneNumber } = req.body;
         //Validate the request body
         if (!fullName || !email || !phoneNumber || !viewedCourse || additionalInfo) {
             return res.status(400).json({ error: "All fields are required" })
@@ -13,6 +13,7 @@ export const submitInfoRequest = async (req, res) => {
         const newInfoRequest = await Request.create({
             fullName,
             email,
+            phoneNumber,
             viewedCourse,
             additionalInfo
         });

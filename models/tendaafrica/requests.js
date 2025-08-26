@@ -10,6 +10,9 @@ const Request = db.define('requests', {
   email: {
     type: DataTypes.STRING
   },
+  phoneNumber: {
+    type: DataTypes.STRING
+  },
   viewedCourse: {
     type: DataTypes.STRING
   },
