@@ -42,7 +42,8 @@ connectDB();
 //     })
 // );
 
-app.use(cors());
+// app.use(cors());
+app.use(cors({ origin: "*" }));
 // Enable CORS for all routes
 // app.use(cors({
 //     origin: ['https://admin.tendacafe.com', 'http://localhost:5173'],
