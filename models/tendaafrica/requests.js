@@ -16,7 +16,7 @@ const Request = db.define('requests', {
   viewedCourse: {
     type: DataTypes.STRING
   },
-  additionalInfo: {
+  additionInfo: {
     type: DataTypes.STRING
   },
 },
