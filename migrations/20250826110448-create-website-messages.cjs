@@ -9,23 +9,23 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      Name: {
+      name: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      Subject: {
+      subject: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      Email: {
+      email: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      PhoneNumber: {
+      phoneNumber: {
         type: Sequelize.STRING,
         allowNull: false
       },
-       Message: {
+       message: {
         type: Sequelize.TEXT,
         allowNull: false
       },
