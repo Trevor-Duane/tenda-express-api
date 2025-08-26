@@ -5,7 +5,7 @@ export const submitInfoRequest = async (req, res) => {
     try {
         const { fullName, email, viewedCourse, additionInfo, phoneNumber } = req.body;
         //Validate the request body
-        if (!fullName || !email || !phoneNumber || !viewedCourse || additionInfo) {
+        if (!fullName || !email || !phoneNumber || !viewedCourse || !additionInfo) {
             return res.status(400).json({ error: "All fields are required" })
         }
 
