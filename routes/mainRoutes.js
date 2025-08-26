@@ -24,6 +24,7 @@ import { createSuitesBooking, getSuiteBookingById, getSuitesBooking } from "../c
 import { createRoom, getRoomById, getRooms, updateRoom } from "../controllers/suites/Rooms.js";
 import { getAllApplications, submitApplication } from "../controllers/tendaafrica/Application.js";
 import { getAllRequests, submitInfoRequest } from "../controllers/tendaafrica/Request.js";
+import { getAllMessages, submitMessage } from "../controllers/tendaafrica/Message.js";
 
 const mainRoutes = express.Router();
 
@@ -158,6 +159,9 @@ mainRoutes.get("/applications", getAllApplications)
 
 mainRoutes.post("/request", submitInfoRequest)
 mainRoutes.get("/requests", getAllRequests)
+
+mainRoutes.post("/message", submitMessage)
+mainRoutes.get("/messages", getAllMessages)
 
 
 export default mainRoutes;
